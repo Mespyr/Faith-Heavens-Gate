@@ -1,4 +1,5 @@
 #include "include/engine.h"
+#include <SDL2/SDL_rect.h>
 
 Engine::~Engine() {
 	SDL_DestroyRenderer(renderer);
@@ -27,4 +28,29 @@ int32_t Engine::init() {
 	}
 
 	return 0;
+}
+
+SDL_Texture* Engine::load_texture(const std::string& file_path) {
+	SDL_Texture* t = nullptr;
+	t = IMG_LoadTexture(renderer, file_path.c_str());
+	if (t == nullptr)
+		log_error(std::cout, "IMG_LoadTexture");
+	return t;
+}
+
+void Engine::clear() {
+	SDL_RenderClear(renderer);
+}
+
+void Engine::render(Object& object, double scale) {
+	SDL_Rect pos;
+	pos.x = object.position.x - object.current_frame.w;
+	pos.y = object.position.y - object.current_frame.h;
+	pos.w = object.current_frame.w * scale;
+	pos.h = object.current_frame.h * scale;
+	SDL_RenderCopyEx(renderer, object.texture, &object.current_frame, &pos, object.angle, nullptr, SDL_FLIP_NONE);
+}
+
+void Engine::display() {
+	SDL_RenderPresent(renderer);
 }

@@ -1,5 +1,5 @@
 # SDL2
-SDL_LIB=-L/usr/lib -lSDL2
+SDL_LIB=-L/usr/lib -lSDL2 -lSDL2_image
 SDL_INCLUDE=-I/usr/local/include
 
 CPP=g++
