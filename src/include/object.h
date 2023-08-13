@@ -6,16 +6,17 @@
 
 class Object {
 public:
-	Object(float x, float y, SDL_Texture* texture) 
+	Object() {}
+	Object(float_t x, float_t y, SDL_Texture* texture) 
 		: position(x, y), texture(texture)
 	{}
 
-	Object(Vec2<float> position, SDL_Texture* texture) 
+	Object(Vec2<float_t> position, SDL_Texture* texture) 
 		: position(position), texture(texture)
 	{}
 
 	Vec2<float> position;
 	SDL_Texture* texture;
 	SDL_Rect current_frame;
-	double angle = 0;
+	float_t angle = 0;
 };

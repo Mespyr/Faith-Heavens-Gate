@@ -1,12 +1,11 @@
 #include "include/engine.h"
-#include <SDL2/SDL_rect.h>
 
 Engine::~Engine() {
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 }
 
-int32_t Engine::init() {
+int32_t Engine::init_window() {
 	window = SDL_CreateWindow(
 	    "Pants",
 		SDL_WINDOWPOS_CENTERED,
@@ -30,6 +29,18 @@ int32_t Engine::init() {
 	return 0;
 }
 
+void Engine::init_textures(SDL_Texture* player_texture) {
+	player.init_textures(player_texture);
+}
+
+void Engine::clear() {
+	SDL_RenderClear(renderer);
+}
+
+void Engine::display() {
+	SDL_RenderPresent(renderer);
+}
+
 SDL_Texture* Engine::load_texture(const std::string& file_path) {
 	SDL_Texture* t = nullptr;
 	t = IMG_LoadTexture(renderer, file_path.c_str());
@@ -38,19 +49,40 @@ SDL_Texture* Engine::load_texture(const std::string& file_path) {
 	return t;
 }
 
-void Engine::clear() {
-	SDL_RenderClear(renderer);
-}
-
-void Engine::render(Object& object, double scale) {
+void Engine::render_object(Object& object) {
 	SDL_Rect pos;
-	pos.x = object.position.x - object.current_frame.w;
-	pos.y = object.position.y - object.current_frame.h;
-	pos.w = object.current_frame.w * scale;
-	pos.h = object.current_frame.h * scale;
-	SDL_RenderCopyEx(renderer, object.texture, &object.current_frame, &pos, object.angle, nullptr, SDL_FLIP_NONE);
+
+	int32_t transform_x = player.player_object.position.x - PLAYER_CENTER_X;
+	int32_t transform_y = player.player_object.position.y - PLAYER_CENTER_Y;
+	
+	pos.x = object.position.x - transform_x;
+	pos.y = object.position.y - transform_y;
+	pos.w = object.current_frame.w * WINDOW_SCALE;
+	pos.h = object.current_frame.h * WINDOW_SCALE;
+	SDL_RenderCopyEx(
+        renderer,
+		object.texture,
+		&object.current_frame,
+		&pos,
+		object.angle,
+		nullptr,
+		SDL_FLIP_NONE
+	);
 }
 
-void Engine::display() {
-	SDL_RenderPresent(renderer);
+void Engine::render_player() {
+	SDL_Rect pos;
+	pos.x = PLAYER_CENTER_X;
+	pos.y = PLAYER_CENTER_Y;
+	pos.w = 16 * WINDOW_SCALE;
+	pos.h = 16 * WINDOW_SCALE;
+	SDL_RenderCopyEx(
+	    renderer,
+		player.player_object.texture,
+		&player.player_object.current_frame,
+		&pos,
+		player.player_object.angle,
+		nullptr,
+		SDL_FLIP_NONE
+	);
 }
