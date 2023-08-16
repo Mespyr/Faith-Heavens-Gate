@@ -11,11 +11,11 @@ public:
 		: position(x, y), texture(texture)
 	{}
 
-	Object(Vec2<float_t> position, SDL_Texture* texture) 
+	Object(Vec2<float_t> position, SDL_Texture* texture)
 		: position(position), texture(texture)
 	{}
 
-	Vec2<float> position;
+	Vec2<float_t> position;
 	SDL_Texture* texture;
 	SDL_Rect current_frame;
 	float_t angle = 0;

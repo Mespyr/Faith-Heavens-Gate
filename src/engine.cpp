@@ -29,16 +29,17 @@ int32_t Engine::init_window() {
 	return 0;
 }
 
-void Engine::init_textures(SDL_Texture* player_texture) {
-	player.init_textures(player_texture);
+void Engine::init_textures(SDL_Texture* player_texture, SDL_Texture* arm_texture) {
+	player.init_textures(player_texture, arm_texture);
+}
+
+void Engine::set_background_texture(SDL_Texture* bg_texture) {
+	background_texture = bg_texture;
+	background_position = {0, 0};
 }
 
 void Engine::clear() {
 	SDL_RenderClear(renderer);
-}
-
-void Engine::display() {
-	SDL_RenderPresent(renderer);
 }
 
 SDL_Texture* Engine::load_texture(const std::string& file_path) {
@@ -51,10 +52,8 @@ SDL_Texture* Engine::load_texture(const std::string& file_path) {
 
 void Engine::render_object(Object& object) {
 	SDL_Rect pos;
-
 	int32_t transform_x = player.player_object.position.x - PLAYER_CENTER_X;
 	int32_t transform_y = player.player_object.position.y - PLAYER_CENTER_Y;
-	
 	pos.x = object.position.x - transform_x;
 	pos.y = object.position.y - transform_y;
 	pos.w = object.current_frame.w * WINDOW_SCALE;
@@ -70,8 +69,46 @@ void Engine::render_object(Object& object) {
 	);
 }
 
-void Engine::render_player() {
+void Engine::render_scene() {
 	SDL_Rect pos;
+
+	// render the background if set to a texture
+	if (background_texture != nullptr) {
+		int32_t transform_x = player.player_object.position.x - PLAYER_CENTER_X;
+		int32_t transform_y = player.player_object.position.y - PLAYER_CENTER_Y;
+
+		// make sure background_position always has coords for the top-right tile of the background
+		// while still being visible on the screen
+
+		if (background_position.y - transform_y > 0)
+			background_position.y -= WINDOW_HEIGHT;
+		else if (-(background_position.y - transform_y) > WINDOW_HEIGHT)
+			background_position.y += WINDOW_HEIGHT;
+
+		if (background_position.x - transform_x < 0)
+			background_position.x += WINDOW_WIDTH;
+		else if (background_position.x - transform_x > WINDOW_WIDTH)
+			background_position.x -= WINDOW_WIDTH;
+		
+		pos.x = background_position.x - transform_x;
+		pos.y = background_position.y - transform_y;
+		pos.w = WINDOW_WIDTH;
+		pos.h = WINDOW_HEIGHT;
+
+		// draw top right
+		SDL_RenderCopy(renderer, background_texture, nullptr, &pos);
+		// draw bottom right
+		pos.y += WINDOW_HEIGHT;
+		SDL_RenderCopy(renderer, background_texture, nullptr, &pos);
+		// draw bottom left
+		pos.x -= WINDOW_WIDTH;
+		SDL_RenderCopy(renderer, background_texture, nullptr, &pos);
+		// draw top left
+		pos.y -= WINDOW_HEIGHT;
+		SDL_RenderCopy(renderer, background_texture, nullptr, &pos);
+	}
+
+	// render player at the center of the screen
 	pos.x = PLAYER_CENTER_X;
 	pos.y = PLAYER_CENTER_Y;
 	pos.w = 16 * WINDOW_SCALE;
@@ -85,4 +122,16 @@ void Engine::render_player() {
 		nullptr,
 		SDL_FLIP_NONE
 	);
+	SDL_RenderCopyEx(
+	    renderer,
+		player.arm_object.texture,
+		&player.arm_object.current_frame,
+		&pos,
+		player.arm_object.angle,
+		nullptr,
+		SDL_FLIP_NONE
+	);
+
+	// display everything to screen
+	SDL_RenderPresent(renderer);
 }
