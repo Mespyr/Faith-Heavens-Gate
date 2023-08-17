@@ -38,17 +38,20 @@ private:
 	Vec2<float_t> background_position = {0, 0}; // positon of the top-right copy of the background. the positon of other copies of the background tile will be based off of this
 
 	const Uint8* kbd_state;
-	Vec2<int32_t> mouse_position;
+	Vec2<int32_t> mouse_position = {0, 0};
+	float_t player_animation_timer = 0;
 public:
 	Engine() {}
 	~Engine();
 
 	Player player;
-	
-	int32_t init_window();                                                      // initialize the window and the renderer
-	SDL_Texture* load_texture(const std::string& file_path);                    // load a texture from a file
-	void init_textures(SDL_Texture* player_texture, SDL_Texture* arm_texture);  // initialize all textures and objects
-	void set_background_texture(SDL_Texture* bg_texture);                       // set the background texture
+	void update_player_animation(Vec2<int32_t> mouse_pos);
+	void update_player_arm_angle(Vec2<int32_t> mouse_pos);
+
+	int32_t init_window();                                    // initialize the window and the renderer
+	SDL_Texture* load_texture(const std::string& file_path);  // load a texture from a file
+	void init_textures(SDL_Texture* player_texture);          // initialize all textures and objects
+	void set_background_texture(SDL_Texture* bg_texture);     // set the background texture
 
 	void clear();
 	

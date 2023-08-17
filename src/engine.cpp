@@ -1,4 +1,6 @@
 #include "include/engine.h"
+#include "include/player.h"
+#include <SDL2/SDL_mouse.h>
 
 Engine::~Engine() {
 	SDL_DestroyRenderer(renderer);
@@ -37,8 +39,8 @@ SDL_Texture* Engine::load_texture(const std::string& file_path) {
 	return t;
 }
 
-void Engine::init_textures(SDL_Texture* player_texture, SDL_Texture* arm_texture) {
-	player.init_textures(player_texture, arm_texture);
+void Engine::init_textures(SDL_Texture* player_texture) {
+	player.init_textures(player_texture);
 }
 
 void Engine::set_background_texture(SDL_Texture* bg_texture) {
@@ -109,6 +111,12 @@ void Engine::update(float_t delta_time) {
 			player.velocity.x = std::min<float>(player.velocity.x + (PLAYER_ACCEL_SPEED * delta_time), 0.0f);
 	}
 
+	if (player_animation_timer >= 0.11) {
+		player.update_animation_frame(mouse_position, WINDOW_CENTER_X, WINDOW_CENTER_Y);
+		player_animation_timer = 0;
+	}
+	else player_animation_timer += delta_time;
+
 	player.update_position(delta_time);
 }
 
@@ -162,15 +170,6 @@ void Engine::render_scene() {
 		&player.player_object.current_frame,
 		&pos,
 		player.player_object.angle,
-		nullptr,
-		SDL_FLIP_NONE
-	);
-	SDL_RenderCopyEx(
-	    renderer,
-		player.arm_object.texture,
-		&player.arm_object.current_frame,
-		&pos,
-		player.arm_object.angle,
 		nullptr,
 		SDL_FLIP_NONE
 	);

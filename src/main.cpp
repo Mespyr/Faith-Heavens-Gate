@@ -18,9 +18,8 @@ int32_t main() {
 		return 1;
 
 	SDL_Texture* player_texture = engine.load_texture("assets/player.png");
-	SDL_Texture* arm_texture    = engine.load_texture("assets/arm.png");
 	SDL_Texture* bg_texture    = engine.load_texture("assets/tileset.png");
-	engine.init_textures(player_texture, arm_texture);
+	engine.init_textures(player_texture);
 	engine.set_background_texture(bg_texture);
 	/////////////////////////////////////////////////////////////////////
 
@@ -66,7 +65,6 @@ int32_t main() {
 	}
 
 	SDL_DestroyTexture(player_texture);
-	SDL_DestroyTexture(arm_texture);
 	SDL_DestroyTexture(bg_texture);
 	SDL_Quit();
 	return 0;
