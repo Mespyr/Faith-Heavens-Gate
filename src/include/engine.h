@@ -34,14 +34,19 @@ private:
 	// multiply MAX_SPEED by n to get the acceleration needed to go full speed in 1/n of a second
 	const float PLAYER_ACCEL_SPEED = PLAYER_MAX_SPEED * 8.0f;
 
+	// background
 	SDL_Texture* background_texture = nullptr;
 	Vec2<float_t> background_position = {0, 0}; // positon of the top-right copy of the background. the positon of other copies of the background tile will be based off of this
 
-	const Uint8* kbd_state;
+	// crosshair
+	SDL_Texture* crosshair_texture;
+	SDL_Rect crosshair_frame;
 	Vec2<int32_t> mouse_position = {0, 0};
+	
+	const Uint8* kbd_state;
 	float_t player_animation_timer = 0;
 public:
-	Engine() {}
+	Engine();
 	~Engine();
 
 	Player player;
@@ -50,7 +55,12 @@ public:
 
 	int32_t init_window();                                    // initialize the window and the renderer
 	SDL_Texture* load_texture(const std::string& file_path);  // load a texture from a file
-	void init_textures(SDL_Texture* player_texture);          // initialize all textures and objects
+
+	void init_textures(
+        SDL_Texture* player_texture,
+		SDL_Texture* crosshair_texture_
+	);  // initialize all textures and objects
+
 	void set_background_texture(SDL_Texture* bg_texture);     // set the background texture
 
 	void clear();

@@ -1,6 +1,9 @@
 #include "include/engine.h"
-#include "include/player.h"
-#include <SDL2/SDL_mouse.h>
+#include <SDL2/SDL_render.h>
+
+Engine::Engine() {
+	SDL_ShowCursor(SDL_FALSE);
+}
 
 Engine::~Engine() {
 	SDL_DestroyRenderer(renderer);
@@ -39,8 +42,13 @@ SDL_Texture* Engine::load_texture(const std::string& file_path) {
 	return t;
 }
 
-void Engine::init_textures(SDL_Texture* player_texture) {
+void Engine::init_textures(SDL_Texture* player_texture, SDL_Texture* crosshair_texture_) {
 	player.init_textures(player_texture);
+	crosshair_texture = crosshair_texture_;
+	crosshair_frame.w = 16;
+	crosshair_frame.h = 16;
+	crosshair_frame.x = 0;
+	crosshair_frame.y = 0;
 }
 
 void Engine::set_background_texture(SDL_Texture* bg_texture) {
@@ -172,6 +180,18 @@ void Engine::render_scene() {
 		player.player_object.angle,
 		nullptr,
 		SDL_FLIP_NONE
+	);
+
+	// render crosshair at mouse position
+	pos.x = mouse_position.x;
+	pos.y = mouse_position.y;
+	pos.w = 28;
+	pos.h = 28;
+	SDL_RenderCopyEx(
+	    renderer,
+		crosshair_texture,
+		nullptr,
+		&pos, 0, nullptr, SDL_FLIP_NONE
 	);
 
 	// display everything to screen
