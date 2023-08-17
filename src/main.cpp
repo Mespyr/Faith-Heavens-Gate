@@ -58,10 +58,8 @@ int32_t main() {
 			//engine.render_object(clone);
 			//engine.render_object(clone2);
 
+			engine.update(delta_time);
 			engine.render_scene();
-			// move player to show that objects will move relative to the player
-			engine.player.player_object.position.x += delta_time * 200;
-			engine.player.player_object.position.y -= delta_time * 100;
 		}
 		else SDL_Delay(1);
 		last_game_step = now;

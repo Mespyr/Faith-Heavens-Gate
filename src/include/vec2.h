@@ -12,7 +12,7 @@ public:
 		return Vec2(x + v.x, y + v.y);
 	}
 
-	Vec2 operator+=(const Vec2 &v) {
+	void operator+=(const Vec2 &v) {
 		x += v.x;
 		y += v.y;
 	}

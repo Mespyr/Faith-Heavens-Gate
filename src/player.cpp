@@ -20,6 +20,7 @@ void Player::init_textures(SDL_Texture* player_texture, SDL_Texture* arm_texture
 		right_clips[i].w = 16;
 		right_clips[i].h = 16;
 	}
+
 	// setup arm clips
 	left_arm_clip.x = 0;
 	left_arm_clip.y = 0;
@@ -34,4 +35,8 @@ void Player::init_textures(SDL_Texture* player_texture, SDL_Texture* arm_texture
 	// set player default clip
 	player_object.current_frame = right_clips[0];
 	arm_object.current_frame = right_arm_clip;
+}
+
+void Player::update_position(float_t delta_time) {
+	player_object.position += velocity * delta_time;
 }

@@ -29,6 +29,14 @@ int32_t Engine::init_window() {
 	return 0;
 }
 
+SDL_Texture* Engine::load_texture(const std::string& file_path) {
+	SDL_Texture* t = nullptr;
+	t = IMG_LoadTexture(renderer, file_path.c_str());
+	if (t == nullptr)
+		log_error(std::cout, "IMG_LoadTexture");
+	return t;
+}
+
 void Engine::init_textures(SDL_Texture* player_texture, SDL_Texture* arm_texture) {
 	player.init_textures(player_texture, arm_texture);
 }
@@ -40,14 +48,6 @@ void Engine::set_background_texture(SDL_Texture* bg_texture) {
 
 void Engine::clear() {
 	SDL_RenderClear(renderer);
-}
-
-SDL_Texture* Engine::load_texture(const std::string& file_path) {
-	SDL_Texture* t = nullptr;
-	t = IMG_LoadTexture(renderer, file_path.c_str());
-	if (t == nullptr)
-		log_error(std::cout, "IMG_LoadTexture");
-	return t;
 }
 
 void Engine::render_object(Object& object) {
@@ -67,6 +67,49 @@ void Engine::render_object(Object& object) {
 		nullptr,
 		SDL_FLIP_NONE
 	);
+}
+
+void Engine::update(float_t delta_time) {
+	kbd_state = SDL_GetKeyboardState(nullptr);
+	SDL_GetMouseState(&mouse_position.x, &mouse_position.y);
+
+	// update plater velocity
+	if (kbd_state[SDL_SCANCODE_W] || kbd_state[SDL_SCANCODE_A] || kbd_state[SDL_SCANCODE_S] || kbd_state[SDL_SCANCODE_D]) {
+		// y movement
+		if (kbd_state[SDL_SCANCODE_W])
+			player.velocity.y = std::max<float>(player.velocity.y - (PLAYER_ACCEL_SPEED * delta_time), -PLAYER_MAX_SPEED);
+		else if (kbd_state[SDL_SCANCODE_S])
+			player.velocity.y = std::min<float>(player.velocity.y + (PLAYER_ACCEL_SPEED * delta_time), PLAYER_MAX_SPEED);
+		// if none of y movement keys are being pressed, slow down
+		else if (player.velocity.y > 0)
+			player.velocity.y = std::max<float>(player.velocity.y - (PLAYER_ACCEL_SPEED * delta_time), 0.0f);
+		else if (player.velocity.y < 0)
+			player.velocity.y = std::min<float>(player.velocity.y + (PLAYER_ACCEL_SPEED * delta_time), 0.0f);
+
+		// x movement
+		if (kbd_state[SDL_SCANCODE_A])
+			player.velocity.x = std::max<float>(player.velocity.x - (PLAYER_ACCEL_SPEED * delta_time), -PLAYER_MAX_SPEED);
+		else if (kbd_state[SDL_SCANCODE_D])
+			player.velocity.x = std::min<float>(player.velocity.x + (PLAYER_ACCEL_SPEED * delta_time), PLAYER_MAX_SPEED);
+		// if none of x movement keys are being pressed, slow down
+		else if (player.velocity.x > 0)
+			player.velocity.x = std::max<float>(player.velocity.x - (PLAYER_ACCEL_SPEED * delta_time), 0.0f);
+		else if (player.velocity.x < 0)
+			player.velocity.x = std::min<float>(player.velocity.x + (PLAYER_ACCEL_SPEED * delta_time), 0.0f);
+	}
+	else {
+		// decrease x and y velocity since none of the movement keys are being pressed
+		if (player.velocity.y > 0)
+			player.velocity.y = std::max<float>(player.velocity.y - (PLAYER_ACCEL_SPEED * delta_time), 0.0f);
+		else if (player.velocity.y < 0)
+			player.velocity.y = std::min<float>(player.velocity.y + (PLAYER_ACCEL_SPEED * delta_time), 0.0f);
+		if (player.velocity.x > 0)
+			player.velocity.x = std::max<float>(player.velocity.x - (PLAYER_ACCEL_SPEED * delta_time), 0.0f);
+		else if (player.velocity.x < 0)
+			player.velocity.x = std::min<float>(player.velocity.x + (PLAYER_ACCEL_SPEED * delta_time), 0.0f);
+	}
+
+	player.update_position(delta_time);
 }
 
 void Engine::render_scene() {
