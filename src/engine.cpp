@@ -34,6 +34,16 @@ int32_t Engine::init_window() {
 	return 0;
 }
 
+bool Engine::running() {
+	return !quit;
+}
+
+void Engine::handle_events() {
+	while (SDL_PollEvent(&e))
+		if (e.type == SDL_QUIT)
+			quit = true;
+}
+
 SDL_Texture* Engine::load_texture(const std::string& file_path) {
 	SDL_Texture* t = nullptr;
 	t = IMG_LoadTexture(renderer, file_path.c_str());
@@ -54,10 +64,6 @@ void Engine::init_textures(SDL_Texture* player_texture, SDL_Texture* crosshair_t
 void Engine::set_background_texture(SDL_Texture* bg_texture) {
 	background_texture = bg_texture;
 	background_position = {0, 0};
-}
-
-void Engine::clear() {
-	SDL_RenderClear(renderer);
 }
 
 void Engine::render_object(Object& object) {
@@ -129,6 +135,7 @@ void Engine::update(float_t delta_time) {
 }
 
 void Engine::render_scene() {
+	SDL_RenderClear(renderer);
 	SDL_Rect pos;
 
 	// render the background if set to a texture

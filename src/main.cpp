@@ -26,38 +26,15 @@ int32_t main() {
 
 	engine.player.player_object.position = {100, 40.5}; // temporarily set player position
 	
-	bool quit = false;
-	SDL_Event e;
 	uint32_t now, last_game_step = SDL_GetTicks();
 	float_t delta_time;
 
-	// create clones to show how movement of player changes the position of stuff on the screen
-	//Object clone(10, 10, player_texture);
-	//clone.current_frame.x = 0;
-	//clone.current_frame.y = 0;
-	//clone.current_frame.w = 128;
-	//clone.current_frame.h = 32;
-	//Object clone2(40, 80, arm_texture);
-	//clone2.current_frame.x = 16;
-	//clone2.current_frame.y = 0;
-	//clone2.current_frame.w = 16;
-	//clone2.current_frame.h = 16;
-
 	// game loop
-	while (!quit) {
+	while (engine.running()) {
 		now = SDL_GetTicks();
-
-		while (SDL_PollEvent(&e))
-			if (e.type == SDL_QUIT)
-				quit = true;
-
+		engine.handle_events();
 		if (last_game_step < now) {
 			delta_time = (now - last_game_step) / 1000.0f;
-			engine.clear();
-
-			//engine.render_object(clone);
-			//engine.render_object(clone2);
-
 			engine.update(delta_time);
 			engine.render_scene();
 		}
@@ -66,6 +43,7 @@ int32_t main() {
 	}
 
 	SDL_DestroyTexture(player_texture);
+	SDL_DestroyTexture(crosshair_texture);
 	SDL_DestroyTexture(bg_texture);
 	SDL_Quit();
 	return 0;
