@@ -29,10 +29,12 @@ private:
 	static const uint32_t PLAYER_CENTER_X = WINDOW_CENTER_X - (8 * WINDOW_SCALE);
 	static const uint32_t PLAYER_CENTER_Y = WINDOW_CENTER_Y - (8 * WINDOW_SCALE);
 
+	// how many pixels the player can travel in 1 second
+	// based off of window size
 	const float_t PLAYER_MAX_SPEED = 350.0f;
 	// how much player can accelerate in one second
 	// multiply MAX_SPEED by n to get the acceleration needed to go full speed in 1/n of a second
-	const float PLAYER_ACCEL_SPEED = PLAYER_MAX_SPEED * 8.0f;
+	const float PLAYER_ACCEL_SPEED = PLAYER_MAX_SPEED * 4.0f;
 
 	// background
 	SDL_Texture* background_texture = nullptr;
@@ -69,4 +71,7 @@ public:
 	void render_object(Object& object);  // render an object's texture at a location relative to the position of the player
 	void update(float_t delta_time);     // handle game updates
 	void render_scene();                 // render all of the objects, the background, and the player
+
+	// TEST
+	Object test_obj;
 };

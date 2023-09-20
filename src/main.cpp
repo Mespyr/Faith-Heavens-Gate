@@ -24,7 +24,16 @@ int32_t main() {
 	engine.set_background_texture(bg_texture);
 	/////////////////////////////////////////////////////////////////////
 
-	engine.player.player_object.position = {100, 40.5}; // temporarily set player position
+	// TEST
+	engine.test_obj.texture = player_texture;
+	engine.test_obj.current_frame.x = 0;
+	engine.test_obj.current_frame.y = 0;
+	engine.test_obj.current_frame.w = 128;
+	engine.test_obj.current_frame.h = 32;
+	engine.test_obj.position = {0, 0};
+	engine.test_obj.collision = true;
+	
+	engine.player.player_object.position = {100, 40}; // temporarily set player position
 	
 	uint32_t now, last_game_step = SDL_GetTicks();
 	float_t delta_time;

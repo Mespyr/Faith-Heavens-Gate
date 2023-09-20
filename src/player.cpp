@@ -1,6 +1,4 @@
 #include "include/player.h"
-#include <cstdint>
-#include <iostream>
 
 void Player::init_textures(SDL_Texture* player_texture) {
 	player_object.texture = player_texture;
@@ -27,7 +25,7 @@ void Player::init_textures(SDL_Texture* player_texture) {
 
 void Player::update_animation_frame(Vec2<int32_t> mouse_pos, uint32_t window_center_x, uint32_t window_center_y) {
 	// change animation frame
-	if (velocity.x != 0 || velocity.y != 0) {
+	if (player_object.velocity.x != 0 || player_object.velocity.y != 0) {
 		animation_frame_index += 1;
 		if (animation_frame_index == 8) animation_frame_index = 0;
 	}
@@ -40,6 +38,18 @@ void Player::update_animation_frame(Vec2<int32_t> mouse_pos, uint32_t window_cen
 		player_object.current_frame = right_clips[animation_frame_index];
 }
 
-void Player::update_position(float_t delta_time) {
-	player_object.position += velocity * delta_time;
+void Player::set_velocity_y(float_t y) {
+	player_object.velocity.y = y;
+}
+
+void Player::set_velocity_x(float_t x) {
+	player_object.velocity.x = x;
+}
+
+float_t Player::get_velocity_y() {
+	return player_object.velocity.y;
+}
+
+float_t Player::get_velocity_x() {
+	return player_object.velocity.x;
 }

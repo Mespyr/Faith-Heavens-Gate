@@ -1,5 +1,4 @@
 #include "include/engine.h"
-#include <SDL2/SDL_render.h>
 
 Engine::Engine() {
 	SDL_ShowCursor(SDL_FALSE);
@@ -93,36 +92,36 @@ void Engine::update(float_t delta_time) {
 	if (kbd_state[SDL_SCANCODE_W] || kbd_state[SDL_SCANCODE_A] || kbd_state[SDL_SCANCODE_S] || kbd_state[SDL_SCANCODE_D]) {
 		// y movement
 		if (kbd_state[SDL_SCANCODE_W])
-			player.velocity.y = std::max<float>(player.velocity.y - (PLAYER_ACCEL_SPEED * delta_time), -PLAYER_MAX_SPEED);
+			player.set_velocity_y(std::max<float>(player.get_velocity_y() - (PLAYER_ACCEL_SPEED * delta_time), -PLAYER_MAX_SPEED));
 		else if (kbd_state[SDL_SCANCODE_S])
-			player.velocity.y = std::min<float>(player.velocity.y + (PLAYER_ACCEL_SPEED * delta_time), PLAYER_MAX_SPEED);
+			player.set_velocity_y(std::min<float>(player.get_velocity_y() + (PLAYER_ACCEL_SPEED * delta_time), PLAYER_MAX_SPEED));
 		// if none of y movement keys are being pressed, slow down
-		else if (player.velocity.y > 0)
-			player.velocity.y = std::max<float>(player.velocity.y - (PLAYER_ACCEL_SPEED * delta_time), 0.0f);
-		else if (player.velocity.y < 0)
-			player.velocity.y = std::min<float>(player.velocity.y + (PLAYER_ACCEL_SPEED * delta_time), 0.0f);
+		else if (player.get_velocity_y() > 0)
+			player.set_velocity_y(std::max<float>(player.get_velocity_y() - (PLAYER_ACCEL_SPEED * delta_time), 0.0f));
+		else if (player.get_velocity_y() < 0)
+			player.set_velocity_y(std::min<float>(player.get_velocity_y() + (PLAYER_ACCEL_SPEED * delta_time), 0.0f));
 
 		// x movement
 		if (kbd_state[SDL_SCANCODE_A])
-			player.velocity.x = std::max<float>(player.velocity.x - (PLAYER_ACCEL_SPEED * delta_time), -PLAYER_MAX_SPEED);
+			player.set_velocity_x(std::max<float>(player.get_velocity_x() - (PLAYER_ACCEL_SPEED * delta_time), -PLAYER_MAX_SPEED));
 		else if (kbd_state[SDL_SCANCODE_D])
-			player.velocity.x = std::min<float>(player.velocity.x + (PLAYER_ACCEL_SPEED * delta_time), PLAYER_MAX_SPEED);
+			player.set_velocity_x(std::min<float>(player.get_velocity_x() + (PLAYER_ACCEL_SPEED * delta_time), PLAYER_MAX_SPEED));
 		// if none of x movement keys are being pressed, slow down
-		else if (player.velocity.x > 0)
-			player.velocity.x = std::max<float>(player.velocity.x - (PLAYER_ACCEL_SPEED * delta_time), 0.0f);
-		else if (player.velocity.x < 0)
-			player.velocity.x = std::min<float>(player.velocity.x + (PLAYER_ACCEL_SPEED * delta_time), 0.0f);
+		else if (player.get_velocity_x() > 0)
+			player.set_velocity_x(std::max<float>(player.get_velocity_x() - (PLAYER_ACCEL_SPEED * delta_time), 0.0f));
+		else if (player.get_velocity_x() < 0)
+			player.set_velocity_x(std::min<float>(player.get_velocity_x() + (PLAYER_ACCEL_SPEED * delta_time), 0.0f));
 	}
 	else {
 		// decrease x and y velocity since none of the movement keys are being pressed
-		if (player.velocity.y > 0)
-			player.velocity.y = std::max<float>(player.velocity.y - (PLAYER_ACCEL_SPEED * delta_time), 0.0f);
-		else if (player.velocity.y < 0)
-			player.velocity.y = std::min<float>(player.velocity.y + (PLAYER_ACCEL_SPEED * delta_time), 0.0f);
-		if (player.velocity.x > 0)
-			player.velocity.x = std::max<float>(player.velocity.x - (PLAYER_ACCEL_SPEED * delta_time), 0.0f);
-		else if (player.velocity.x < 0)
-			player.velocity.x = std::min<float>(player.velocity.x + (PLAYER_ACCEL_SPEED * delta_time), 0.0f);
+		if (player.get_velocity_y() > 0)
+			player.set_velocity_y(std::max<float>(player.get_velocity_y() - (PLAYER_ACCEL_SPEED * delta_time), 0.0f));
+		else if (player.get_velocity_y() < 0)
+			player.set_velocity_y(std::min<float>(player.get_velocity_y() + (PLAYER_ACCEL_SPEED * delta_time), 0.0f));
+		if (player.get_velocity_x() > 0)
+			player.set_velocity_x(std::max<float>(player.get_velocity_x() - (PLAYER_ACCEL_SPEED * delta_time), 0.0f));
+		else if (player.get_velocity_x() < 0)
+			player.set_velocity_x(std::min<float>(player.get_velocity_x() + (PLAYER_ACCEL_SPEED * delta_time), 0.0f));
 	}
 
 	if (player_animation_timer >= 0.11) {
@@ -131,7 +130,7 @@ void Engine::update(float_t delta_time) {
 	}
 	else player_animation_timer += delta_time;
 
-	player.update_position(delta_time);
+	player.player_object.update_position(delta_time);
 }
 
 void Engine::render_scene() {
@@ -174,6 +173,10 @@ void Engine::render_scene() {
 		SDL_RenderCopy(renderer, background_texture, nullptr, &pos);
 	}
 
+	// TEST
+	render_object(test_obj);
+
+	
 	// render player at the center of the screen
 	pos.x = PLAYER_CENTER_X;
 	pos.y = PLAYER_CENTER_Y;
@@ -192,8 +195,8 @@ void Engine::render_scene() {
 	// render crosshair at mouse position
 	pos.x = mouse_position.x;
 	pos.y = mouse_position.y;
-	pos.w = 28;
-	pos.h = 28;
+	pos.w = 32;
+	pos.h = 32;
 	SDL_RenderCopyEx(
 	    renderer,
 		crosshair_texture,
