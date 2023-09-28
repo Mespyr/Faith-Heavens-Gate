@@ -28,12 +28,12 @@ int32_t main() {
 	engine.test_obj.texture = player_texture;
 	engine.test_obj.current_frame.x = 0;
 	engine.test_obj.current_frame.y = 0;
-	engine.test_obj.current_frame.w = 128;
-	engine.test_obj.current_frame.h = 32;
+	engine.test_obj.current_frame.w = 384;
+	engine.test_obj.current_frame.h = 96;
 	engine.test_obj.position = {0, 0};
 	engine.test_obj.collision = true;
 	
-	engine.player.player_object.position = {100, 40}; // temporarily set player position
+	engine.player.object.position = {100, 40}; // temporarily set player position
 	
 	uint32_t now, last_game_step = SDL_GetTicks();
 	float_t delta_time;

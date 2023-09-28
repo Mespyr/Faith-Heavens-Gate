@@ -1,4 +1,5 @@
 #include "include/engine.h"
+#include <cstdint>
 
 Engine::Engine() {
 	SDL_ShowCursor(SDL_FALSE);
@@ -65,14 +66,36 @@ void Engine::set_background_texture(SDL_Texture* bg_texture) {
 	background_position = {0, 0};
 }
 
+bool Engine::check_collision(Object obj1, Object obj2) {
+	// points for object 1's hitbox
+	float_t obj1_top_left_x = obj1.position.x,
+		obj1_top_left_y = obj1.position.y,
+		obj1_bottom_right_x = obj1.position.x + obj1.current_frame.w,
+		obj1_bottom_right_y = obj1.position.y + obj1.current_frame.h,
+	// points for object 2's hitbox
+		obj2_top_left_x = obj2.position.x,
+		obj2_top_left_y = obj2.position.y,
+		obj2_bottom_right_x = obj2.position.x + obj2.current_frame.w,
+		obj2_bottom_right_y = obj2.position.y + obj2.current_frame.h;
+
+	// TODO: FIX
+	if (obj1_top_left_x > obj2_bottom_right_x || obj2_top_left_x > obj1_bottom_right_x)
+		return false;
+
+	if (obj1_bottom_right_y > obj2_top_left_y || obj2_bottom_right_y > obj1_top_left_y)
+		return false;
+	
+	return true;
+}
+
 void Engine::render_object(Object& object) {
 	SDL_Rect pos;
-	int32_t transform_x = player.player_object.position.x - PLAYER_CENTER_X;
-	int32_t transform_y = player.player_object.position.y - PLAYER_CENTER_Y;
+	float_t transform_x = player.object.position.x - PLAYER_CENTER_X;
+	float_t transform_y = player.object.position.y - PLAYER_CENTER_Y;
 	pos.x = object.position.x - transform_x;
 	pos.y = object.position.y - transform_y;
-	pos.w = object.current_frame.w * WINDOW_SCALE;
-	pos.h = object.current_frame.h * WINDOW_SCALE;
+	pos.w = object.current_frame.w;
+	pos.h = object.current_frame.h;
 	SDL_RenderCopyEx(
         renderer,
 		object.texture,
@@ -130,7 +153,12 @@ void Engine::update(float_t delta_time) {
 	}
 	else player_animation_timer += delta_time;
 
-	player.player_object.update_position(delta_time);
+	player.object.update_position(delta_time);
+
+	if (check_collision(player.object, test_obj))
+		std::cout << "Collision" << std::endl;
+	else
+		std::cout << "No Collision" << std::endl;
 }
 
 void Engine::render_scene() {
@@ -139,8 +167,8 @@ void Engine::render_scene() {
 
 	// render the background if set to a texture
 	if (background_texture != nullptr) {
-		int32_t transform_x = player.player_object.position.x - PLAYER_CENTER_X;
-		int32_t transform_y = player.player_object.position.y - PLAYER_CENTER_Y;
+		float_t transform_x = player.object.position.x - PLAYER_CENTER_X;
+		float_t transform_y = player.object.position.y - PLAYER_CENTER_Y;
 
 		// make sure background_position always has coords for the top-right tile of the background
 		// while still being visible on the screen
@@ -175,19 +203,18 @@ void Engine::render_scene() {
 
 	// TEST
 	render_object(test_obj);
-
 	
 	// render player at the center of the screen
 	pos.x = PLAYER_CENTER_X;
 	pos.y = PLAYER_CENTER_Y;
-	pos.w = 16 * WINDOW_SCALE;
-	pos.h = 16 * WINDOW_SCALE;
+	pos.w = 48;
+	pos.h = 48;
 	SDL_RenderCopyEx(
 	    renderer,
-		player.player_object.texture,
-		&player.player_object.current_frame,
+		player.object.texture,
+		&player.object.current_frame,
 		&pos,
-		player.player_object.angle,
+		player.object.angle,
 		nullptr,
 		SDL_FLIP_NONE
 	);

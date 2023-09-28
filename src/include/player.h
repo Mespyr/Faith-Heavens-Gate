@@ -9,7 +9,7 @@ class Player {
 public:
 	Player() {}
 
-	Object player_object;
+	Object object;
 
 	void init_textures(SDL_Texture* player_texture);
 	void update_animation_frame(Vec2<int32_t> mouse_pos, uint32_t window_center_x, uint32_t window_center_y);

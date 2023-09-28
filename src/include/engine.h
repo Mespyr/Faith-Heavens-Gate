@@ -21,13 +21,12 @@ private:
 
 	static const uint32_t WINDOW_WIDTH = 1280;
 	static const uint32_t WINDOW_HEIGHT = 720;
-	static const uint32_t WINDOW_SCALE = 3;
 
 	static const uint32_t WINDOW_CENTER_X = WINDOW_WIDTH / 2;
 	static const uint32_t WINDOW_CENTER_Y = WINDOW_HEIGHT / 2;
 
-	static const uint32_t PLAYER_CENTER_X = WINDOW_CENTER_X - (8 * WINDOW_SCALE);
-	static const uint32_t PLAYER_CENTER_Y = WINDOW_CENTER_Y - (8 * WINDOW_SCALE);
+	static const uint32_t PLAYER_CENTER_X = WINDOW_CENTER_X - 24;
+	static const uint32_t PLAYER_CENTER_Y = WINDOW_CENTER_Y - 24;
 
 	// how many pixels the player can travel in 1 second
 	// based off of window size
@@ -68,10 +67,13 @@ public:
 	);  // initialize all textures and objects
 	void set_background_texture(SDL_Texture* bg_texture);     // set the background texture
 
+	bool check_collision(Object obj1, Object obj2);  // check if two objects' hitboxes are intersecting with eachother
+
 	void render_object(Object& object);  // render an object's texture at a location relative to the position of the player
 	void update(float_t delta_time);     // handle game updates
 	void render_scene();                 // render all of the objects, the background, and the player
 
+	
 	// TEST
 	Object test_obj;
 };
