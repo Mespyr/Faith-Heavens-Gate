@@ -78,14 +78,14 @@ bool Engine::check_collision(Object obj1, Object obj2) {
 		obj2_bottom_right_x = obj2.position.x + obj2.current_frame.w,
 		obj2_bottom_right_y = obj2.position.y + obj2.current_frame.h;
 
-	// TODO: FIX
-	if (obj1_top_left_x > obj2_bottom_right_x || obj2_top_left_x > obj1_bottom_right_x)
-		return false;
-
-	if (obj1_bottom_right_y > obj2_top_left_y || obj2_bottom_right_y > obj1_top_left_y)
-		return false;
+	if (((obj1_top_left_x > obj2_top_left_x && obj1_top_left_x < obj2_bottom_right_x) ||
+		(obj1_bottom_right_x > obj2_top_left_x && obj1_bottom_right_x < obj2_bottom_right_x)) &&
+		((obj1_top_left_y > obj2_top_left_y && obj1_top_left_y < obj2_bottom_right_y) ||
+		(obj1_bottom_right_y > obj2_top_left_y && obj1_bottom_right_y < obj2_bottom_right_y))) {
+		return true;
+	}
 	
-	return true;
+	return false;
 }
 
 void Engine::render_object(Object& object) {
@@ -155,10 +155,9 @@ void Engine::update(float_t delta_time) {
 
 	player.object.update_position(delta_time);
 
-	if (check_collision(player.object, test_obj))
-		std::cout << "Collision" << std::endl;
-	else
-		std::cout << "No Collision" << std::endl;
+	if (check_collision(player.object, test_obj)) {
+		player.object.position -= player.object.velocity * delta_time;
+	}
 }
 
 void Engine::render_scene() {
