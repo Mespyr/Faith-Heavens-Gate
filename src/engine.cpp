@@ -1,5 +1,4 @@
 #include "include/engine.h"
-#include <cstdint>
 
 Engine::Engine() {
 	SDL_ShowCursor(SDL_FALSE);
@@ -78,14 +77,13 @@ bool Engine::check_collision(Object obj1, Object obj2) {
 		obj2_bottom_right_x = obj2.position.x + obj2.current_frame.w,
 		obj2_bottom_right_y = obj2.position.y + obj2.current_frame.h;
 
-	if (((obj1_top_left_x > obj2_top_left_x && obj1_top_left_x < obj2_bottom_right_x) ||
-		(obj1_bottom_right_x > obj2_top_left_x && obj1_bottom_right_x < obj2_bottom_right_x)) &&
-		((obj1_top_left_y > obj2_top_left_y && obj1_top_left_y < obj2_bottom_right_y) ||
-		(obj1_bottom_right_y > obj2_top_left_y && obj1_bottom_right_y < obj2_bottom_right_y))) {
-		return true;
-	}
-	
-	return false;
+	return ((
+			 (obj1_top_left_x > obj2_top_left_x && obj1_top_left_x < obj2_bottom_right_x) ||
+			 (obj1_bottom_right_x > obj2_top_left_x && obj1_bottom_right_x < obj2_bottom_right_x)
+			) && (
+			 (obj1_top_left_y > obj2_top_left_y && obj1_top_left_y < obj2_bottom_right_y) ||
+			 (obj1_bottom_right_y > obj2_top_left_y && obj1_bottom_right_y < obj2_bottom_right_y)
+		   ));
 }
 
 void Engine::render_object(Object& object) {
@@ -147,16 +145,20 @@ void Engine::update(float_t delta_time) {
 			player.set_velocity_x(std::min<float>(player.get_velocity_x() + (PLAYER_ACCEL_SPEED * delta_time), 0.0f));
 	}
 
+	// update player animation
 	if (player_animation_timer >= 0.11) {
 		player.update_animation_frame(mouse_position, WINDOW_CENTER_X, WINDOW_CENTER_Y);
 		player_animation_timer = 0;
 	}
 	else player_animation_timer += delta_time;
 
+	// update player position and check for collisions
 	player.object.update_position(delta_time);
-
+	
 	if (check_collision(player.object, test_obj)) {
 		player.object.position -= player.object.velocity * delta_time;
+		player.object.velocity.x = 0;
+		player.object.velocity.y = 0;
 	}
 }
 
