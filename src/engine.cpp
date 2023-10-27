@@ -94,15 +94,11 @@ void Engine::render_object(Object& object) {
 	pos.y = object.position.y - transform_y;
 	pos.w = object.current_frame.w;
 	pos.h = object.current_frame.h;
-	SDL_RenderCopyEx(
-        renderer,
-		object.texture,
-		&object.current_frame,
-		&pos,
-		object.angle,
-		nullptr,
-		SDL_FLIP_NONE
-	);
+
+	if (!(
+		  (pos.x + pos.w <= 0) || (pos.x >= (int32_t) WINDOW_WIDTH) ||
+		  (pos.y + pos.h <= 0) || (pos.y >= (int32_t) WINDOW_HEIGHT))
+		) SDL_RenderCopyEx(renderer, object.texture, &object.current_frame, &pos, object.angle, nullptr, SDL_FLIP_NONE);
 }
 
 void Engine::update(float_t delta_time) {
