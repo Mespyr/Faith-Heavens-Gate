@@ -19,7 +19,7 @@ int32_t main() {
 
 	SDL_Texture* player_texture = engine.load_texture("assets/player.png");
 	SDL_Texture* crosshair_texture = engine.load_texture("assets/crosshair.png");
-	SDL_Texture* bg_texture    = engine.load_texture("assets/tileset.png");
+	SDL_Texture* bg_texture = engine.load_texture("assets/tileset.png");
 	engine.init_textures(player_texture, crosshair_texture);
 	engine.set_background_texture(bg_texture);
 	/////////////////////////////////////////////////////////////////////

@@ -22,14 +22,16 @@ private:
 	static const uint32_t WINDOW_WIDTH = 1280;
 	static const uint32_t WINDOW_HEIGHT = 720;
 
+	static const uint32_t PLAYER_WIDTH = 48;
+	static const uint32_t PLAYER_HEIGHT = 48;
+	
 	static const uint32_t WINDOW_CENTER_X = WINDOW_WIDTH / 2;
 	static const uint32_t WINDOW_CENTER_Y = WINDOW_HEIGHT / 2;
 
-	static const uint32_t PLAYER_CENTER_X = WINDOW_CENTER_X - 24;
-	static const uint32_t PLAYER_CENTER_Y = WINDOW_CENTER_Y - 24;
+	static const uint32_t PLAYER_CENTER_X = WINDOW_CENTER_X - (PLAYER_WIDTH / 2);
+	static const uint32_t PLAYER_CENTER_Y = WINDOW_CENTER_Y - (PLAYER_HEIGHT / 2);
 
 	// how many pixels the player can travel in 1 second
-	// based off of window size
 	const float_t PLAYER_MAX_SPEED = 350.0f;
 	// how much player can accelerate in one second
 	// multiply MAX_SPEED by n to get the acceleration needed to go full speed in 1/n of a second
@@ -54,7 +56,6 @@ public:
 
 	Player player;
 	void update_player_animation(Vec2<int32_t> mouse_pos);
-	void update_player_arm_angle(Vec2<int32_t> mouse_pos);
 
 	int32_t init_window();
 	bool running();
@@ -73,7 +74,6 @@ public:
 	void update(float_t delta_time);     // handle game updates
 	void render_scene();                 // render all of the objects, the background, and the player
 
-	
 	// TEST
 	Object test_obj;
 };
