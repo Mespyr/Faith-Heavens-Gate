@@ -51,9 +51,6 @@ int32_t main() {
 		last_game_step = now;
 	}
 
-	SDL_DestroyTexture(player_texture);
-	SDL_DestroyTexture(crosshair_texture);
-	SDL_DestroyTexture(bg_texture);
 	SDL_Quit();
 	return 0;
 }

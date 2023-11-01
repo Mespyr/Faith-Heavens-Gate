@@ -66,17 +66,17 @@ void Engine::set_background_texture(SDL_Texture* bg_texture) {
 	background_position = {0, 0};
 }
 
-bool Engine::check_collision(Object obj1, Object obj2) {
+bool Engine::check_collision(Object* obj1, Object* obj2) {
 	// points for object 1's hitbox
-	float_t obj1_top_left_x = obj1.position.x,
-		obj1_top_left_y = obj1.position.y,
-		obj1_bottom_right_x = obj1.position.x + obj1.current_frame.w,
-		obj1_bottom_right_y = obj1.position.y + obj1.current_frame.h,
+	float_t obj1_top_left_x = obj1->position.x,
+		obj1_top_left_y = obj1->position.y,
+		obj1_bottom_right_x = obj1->position.x + obj1->current_frame.w,
+		obj1_bottom_right_y = obj1->position.y + obj1->current_frame.h,
 	// points for object 2's hitbox
-		obj2_top_left_x = obj2.position.x,
-		obj2_top_left_y = obj2.position.y,
-		obj2_bottom_right_x = obj2.position.x + obj2.current_frame.w,
-		obj2_bottom_right_y = obj2.position.y + obj2.current_frame.h;
+		obj2_top_left_x = obj2->position.x,
+		obj2_top_left_y = obj2->position.y,
+		obj2_bottom_right_x = obj2->position.x + obj2->current_frame.w,
+		obj2_bottom_right_y = obj2->position.y + obj2->current_frame.h;
 
 	return ((
 			 (obj1_top_left_x > obj2_top_left_x && obj1_top_left_x < obj2_bottom_right_x) ||
@@ -87,19 +87,19 @@ bool Engine::check_collision(Object obj1, Object obj2) {
 		   ));
 }
 
-void Engine::render_object(Object& object) {
+void Engine::render_object(Object* object) {
 	SDL_Rect pos;
 	float_t transform_x = player.object.position.x - PLAYER_CENTER_X;
 	float_t transform_y = player.object.position.y - PLAYER_CENTER_Y;
-	pos.x = object.position.x - transform_x;
-	pos.y = object.position.y - transform_y;
-	pos.w = object.current_frame.w;
-	pos.h = object.current_frame.h;
+	pos.x = object->position.x - transform_x;
+	pos.y = object->position.y - transform_y;
+	pos.w = object->current_frame.w;
+	pos.h = object->current_frame.h;
 
 	if (!(
 		  (pos.x + pos.w <= 0) || (pos.x >= (int32_t) WINDOW_WIDTH) ||
 		  (pos.y + pos.h <= 0) || (pos.y >= (int32_t) WINDOW_HEIGHT))
-		) SDL_RenderCopyEx(renderer, object.texture, &object.current_frame, &pos, object.angle, nullptr, SDL_FLIP_NONE);
+		) SDL_RenderCopyEx(renderer, object->texture, &object->current_frame, &pos, object->angle, nullptr, SDL_FLIP_NONE);
 }
 
 void Engine::update(float_t delta_time) {
@@ -143,7 +143,7 @@ void Engine::update(float_t delta_time) {
 	}
 
 	// update player animation
-	if (player_animation_timer >= 0.11) {
+	if (player_animation_timer >= 0.10) {
 		player.update_animation_frame(mouse_position, WINDOW_CENTER_X, WINDOW_CENTER_Y);
 		player_animation_timer = 0;
 	}
@@ -152,7 +152,7 @@ void Engine::update(float_t delta_time) {
 	// update player position and check for collisions
 	player.object.update_position(delta_time);
 	
-	if (check_collision(player.object, test_obj)) {
+	if (check_collision(&player.object, &test_obj)) {
 		player.object.position -= player.object.velocity * delta_time;
 		player.object.velocity.x = 0;
 		player.object.velocity.y = 0;
@@ -200,7 +200,7 @@ void Engine::render_scene() {
 	}
 
 	// TEST
-	render_object(test_obj);
+	render_object(&test_obj);
 	
 	// render player at the center of the screen
 	pos.x = PLAYER_CENTER_X;

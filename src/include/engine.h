@@ -68,9 +68,9 @@ public:
 	);  // initialize all textures and objects
 	void set_background_texture(SDL_Texture* bg_texture);     // set the background texture
 
-	bool check_collision(Object obj1, Object obj2);  // check if two objects' hitboxes are intersecting with eachother
+	bool check_collision(Object* obj1, Object* obj2);  // check if two objects' hitboxes are intersecting with eachother
 
-	void render_object(Object& object);  // render an object's texture at a location relative to the position of the player
+	void render_object(Object* object);  // render an object's texture at a location relative to the position of the player
 	void update(float_t delta_time);     // handle game updates
 	void render_scene();                 // render all of the objects, the background, and the player
 
