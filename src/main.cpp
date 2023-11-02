@@ -25,15 +25,10 @@ int32_t main() {
 	/////////////////////////////////////////////////////////////////////
 
 	// TEST
-	engine.test_obj.texture = player_texture;
-	engine.test_obj.current_frame.x = 0;
-	engine.test_obj.current_frame.y = 0;
-	engine.test_obj.current_frame.w = 384;
-	engine.test_obj.current_frame.h = 96;
-	engine.test_obj.position = {100, 40};
-	engine.test_obj.collision = true; // value to set so engine knows to check for collision
-	
 	engine.player.object.position = {0, 0}; // temporarily set player position
+	engine.map_add_rectangle({100, 40}, 200, 100, {200, 150, 75, 100}, true, 0, false);
+	engine.map_add_rectangle({400, 80}, 400, 200, {200, 150, 75, 100}, true, 0, true);
+	engine.map_add_rectangle({400, 80}, 100, 500, {200, 150, 75, 100}, true, 0, true);
 	
 	uint32_t now, last_game_step = SDL_GetTicks();
 	float_t delta_time;
@@ -51,6 +46,11 @@ int32_t main() {
 		last_game_step = now;
 	}
 
+	engine.map_reset();
+
+	SDL_DestroyTexture(player_texture);
+	SDL_DestroyTexture(crosshair_texture);
+	SDL_DestroyTexture(bg_texture);
 	SDL_Quit();
 	return 0;
 }

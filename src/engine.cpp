@@ -1,4 +1,6 @@
 #include "include/engine.h"
+#include "include/object.h"
+#include <SDL2/SDL_pixels.h>
 
 Engine::Engine() {
 	SDL_ShowCursor(SDL_FALSE);
@@ -151,12 +153,17 @@ void Engine::update(float_t delta_time) {
 
 	// update player position and check for collisions
 	player.object.update_position(delta_time);
-	
-	if (check_collision(&player.object, &test_obj)) {
-		player.object.position -= player.object.velocity * delta_time;
-		player.object.velocity.x = 0;
-		player.object.velocity.y = 0;
+
+	// check collision with map
+	for (Object rect : map_rectangles) {
+		if (!rect.collision) continue;
+		if (check_collision(&player.object, &rect)) {
+			player.object.position -= player.object.velocity * delta_time;
+			player.object.velocity.x = 0;
+			player.object.velocity.y = 0;
+		}
 	}
+	
 }
 
 void Engine::render_scene() {
@@ -199,8 +206,9 @@ void Engine::render_scene() {
 		SDL_RenderCopy(renderer, background_texture, nullptr, &pos);
 	}
 
-	// TEST
-	render_object(&test_obj);
+	// render map
+	for (Object rect : map_rectangles)
+		render_object(&rect);
 	
 	// render player at the center of the screen
 	pos.x = PLAYER_CENTER_X;
@@ -231,4 +239,32 @@ void Engine::render_scene() {
 
 	// display everything to screen
 	SDL_RenderPresent(renderer);
+}
+
+void Engine::map_reset() {
+	for (Object rect : map_rectangles)
+		SDL_DestroyTexture(rect.texture);
+	map_rectangles.clear();
+}
+
+void Engine::map_add_rectangle(Vec2<float_t> position, uint32_t width, uint32_t height, SDL_Color color, bool filled, uint32_t border_width, bool collision) {
+	Object rect;
+	rect.texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, width, height);
+	rect.current_frame.x = 0;
+	rect.current_frame.y = 0;
+	rect.current_frame.w = width;
+	rect.current_frame.h = height;
+	rect.position = position;
+	rect.collision = collision;
+
+	uint32_t* pixels = (uint32_t*) malloc(width * height * sizeof(uint32_t));
+
+	// TODO: 'filled' and 'border_width'
+	// TODO: fix color so it will work
+	for (uint32_t p = 0; p < (width * height); p++)
+		pixels[p] = 0x00000000;
+
+	SDL_UpdateTexture(rect.texture, nullptr, pixels, width * sizeof(uint32_t));
+	map_rectangles.push_back(rect);
+	std::cout << map_rectangles.size() << std::endl;
 }

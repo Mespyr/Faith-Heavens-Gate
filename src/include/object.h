@@ -15,8 +15,6 @@ public:
 		: position(position), texture(texture)
 	{}
 
-	~Object();
-
 	bool collision = false;
 	Vec2<float_t> position;
 	Vec2<float_t> velocity = {0, 0};

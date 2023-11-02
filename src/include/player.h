@@ -6,6 +6,10 @@
 #include "vec2.h"
 
 class Player {
+private:
+	SDL_Rect left_clips[8];
+	SDL_Rect right_clips[8];
+	uint32_t animation_frame_index = 0;
 public:
 	Player() {}
 
@@ -18,9 +22,4 @@ public:
 	void set_velocity_x(float_t x);
 	float_t get_velocity_y();
 	float_t get_velocity_x();
-private:
-	SDL_Rect left_clips[8];
-	SDL_Rect right_clips[8];
-
-	uint32_t animation_frame_index = 0;
 };

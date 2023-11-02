@@ -8,6 +8,7 @@
 #include <cstdint>
 #include <iostream>
 #include <string>
+#include <vector>
 
 #include "util.h"
 #include "object.h"
@@ -32,10 +33,10 @@ private:
 	static const uint32_t PLAYER_CENTER_Y = WINDOW_CENTER_Y - (PLAYER_HEIGHT / 2);
 
 	// how many pixels the player can travel in 1 second
-	const float_t PLAYER_MAX_SPEED = 350.0f;
+	const float_t PLAYER_MAX_SPEED = 400.0f;
 	// how much player can accelerate in one second
 	// multiply MAX_SPEED by n to get the acceleration needed to go full speed in 1/n of a second
-	const float PLAYER_ACCEL_SPEED = PLAYER_MAX_SPEED * 4.0f;
+	const float PLAYER_ACCEL_SPEED = PLAYER_MAX_SPEED * 3.0f;
 
 	// background
 	SDL_Texture* background_texture = nullptr;
@@ -45,11 +46,15 @@ private:
 	SDL_Texture* crosshair_texture;
 	SDL_Rect crosshair_frame;
 	Vec2<int32_t> mouse_position = {0, 0};
-	
+
+	// checks / states
 	const Uint8* kbd_state;
 	float_t player_animation_timer = 0;
 	bool quit = false;
 	SDL_Event e;
+
+	// map loading
+	std::vector<Object> map_rectangles;
 public:
 	Engine();
 	~Engine();
@@ -74,6 +79,15 @@ public:
 	void update(float_t delta_time);     // handle game updates
 	void render_scene();                 // render all of the objects, the background, and the player
 
-	// TEST
-	Object test_obj;
+	// map loading
+	void map_reset();
+	void map_add_rectangle(
+		Vec2<float_t> position,
+	    uint32_t width,
+		uint32_t height,
+		SDL_Color color,
+		bool filled,           // if rectangle will be filled with one color, or if it will have a border
+		uint32_t border_width, // the amount of pixels the border would be
+		bool collision         // if rectangle should collide with player
+	);
 };
