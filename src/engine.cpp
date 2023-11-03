@@ -1,6 +1,4 @@
 #include "include/engine.h"
-#include "include/object.h"
-#include <SDL2/SDL_pixels.h>
 
 Engine::Engine() {
 	SDL_ShowCursor(SDL_FALSE);
@@ -247,7 +245,7 @@ void Engine::map_reset() {
 	map_rectangles.clear();
 }
 
-void Engine::map_add_rectangle(Vec2<float_t> position, uint32_t width, uint32_t height, SDL_Color color, bool filled, uint32_t border_width, bool collision) {
+void Engine::map_add_rectangle(Vec2<float_t> position, uint32_t width, uint32_t height, uint32_t color, bool filled, uint32_t border_width, bool collision) {
 	Object rect;
 	rect.texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, width, height);
 	rect.current_frame.x = 0;
@@ -262,9 +260,8 @@ void Engine::map_add_rectangle(Vec2<float_t> position, uint32_t width, uint32_t 
 	// TODO: 'filled' and 'border_width'
 	// TODO: fix color so it will work
 	for (uint32_t p = 0; p < (width * height); p++)
-		pixels[p] = 0x00000000;
+		pixels[p] = color;
 
 	SDL_UpdateTexture(rect.texture, nullptr, pixels, width * sizeof(uint32_t));
 	map_rectangles.push_back(rect);
-	std::cout << map_rectangles.size() << std::endl;
 }
