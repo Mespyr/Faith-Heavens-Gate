@@ -20,8 +20,8 @@ private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 
-	static const uint32_t WINDOW_WIDTH = 1280;
-	static const uint32_t WINDOW_HEIGHT = 720;
+	static const uint32_t WINDOW_WIDTH = 1920;
+	static const uint32_t WINDOW_HEIGHT = 1080;
 
 	static const uint32_t PLAYER_WIDTH = 48;
 	static const uint32_t PLAYER_HEIGHT = 48;
@@ -78,7 +78,7 @@ public:
 	void update(float_t delta_time);                   // handle game updates
 
 	// rendering
-	void render_object(Object* object);  // render an object's texture at a location relative to the position of the player
+	inline void render_object(Object* object);  // render an object's texture at a location relative to the position of the player
 	void render_scene();                 // render all of the objects, the background, and the player
 
 	// map loading

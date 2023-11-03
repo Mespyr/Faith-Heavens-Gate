@@ -33,39 +33,13 @@ int32_t main() {
 	engine.map_add_rectangle({500, 280}, 500, 500, 0x112233, true, 0, false);
 	engine.map_add_rectangle({2000, 280}, 500, 500, 0x112233, true, 0, false);
 	engine.map_add_rectangle({4500, 280}, 500, 500, 0x112233, true, 0, false);
-	for (int i = 0; i < 100; i++)
-		engine.map_add_rectangle({(float_t)400+i*100, (float_t)i*150}, 70, 70, 0x254364, true, 0, i % 2 == 0 ? true : false);
-	for (int i = 0; i < 100; i++)
-		engine.map_add_rectangle({(float_t)200+i*100, (float_t)i*150}, 70, 70, 0x254364, true, 0, i % 2 == 0 ? true : false);
-	for (int i = 0; i < 100; i++)
-		engine.map_add_rectangle({(float_t)i*100, (float_t)i*150}, 70, 70, 0x254364, true, 0, i % 2 == 0 ? true : false);
-	for (int i = 0; i < 100; i++)
-		engine.map_add_rectangle({(float_t)-200+i*100, (float_t)i*150}, 70, 70, 0x254364, true, 0, i % 2 == 0 ? true : false);
-	for (int i = 0; i < 100; i++)
-		engine.map_add_rectangle({(float_t)-400+i*100, (float_t)i*150}, 70, 70, 0x254364, true, 0, i % 2 == 0 ? true : false);
-	for (int i = 0; i < 100; i++)
-		engine.map_add_rectangle({(float_t)600+i*100, (float_t)i*150}, 70, 70, 0x254364, true, 0, i % 2 == 0 ? true : false);
-	for (int i = 0; i < 100; i++)
-		engine.map_add_rectangle({(float_t)800+i*100, (float_t)i*150}, 70, 70, 0x254364, true, 0, i % 2 == 0 ? true : false);
-	for (int i = 0; i < 100; i++)
-		engine.map_add_rectangle({(float_t)1000+i*100, (float_t)i*150}, 70, 70, 0x254364, true, 0, i % 2 == 0 ? true : false);
-	for (int i = 0; i < 100; i++)
-		engine.map_add_rectangle({(float_t)300+i*100, (float_t)i*150}, 70, 70, 0x254364, true, 0, i % 2 == 0 ? true : false);
-	for (int i = 0; i < 100; i++)
-		engine.map_add_rectangle({(float_t)100+i*100, (float_t)i*150}, 70, 70, 0x254364, true, 0, i % 2 == 0 ? true : false);
-	for (int i = 0; i < 100; i++)
-		engine.map_add_rectangle({(float_t)-100+i*100, (float_t)i*150}, 70, 70, 0x254364, true, 0, i % 2 == 0 ? true : false);
-	for (int i = 0; i < 100; i++)
-		engine.map_add_rectangle({(float_t)-300+i*100, (float_t)i*150}, 70, 70, 0x254364, true, 0, i % 2 == 0 ? true : false);
-	for (int i = 0; i < 100; i++)
-		engine.map_add_rectangle({(float_t)-500+i*100, (float_t)i*150}, 70, 70, 0x254364, true, 0, i % 2 == 0 ? true : false);
-	for (int i = 0; i < 100; i++)
-		engine.map_add_rectangle({(float_t)500+i*100, (float_t)i*150}, 70, 70, 0x254364, true, 0, i % 2 == 0 ? true : false);
-	for (int i = 0; i < 100; i++)
-		engine.map_add_rectangle({(float_t)700+i*100, (float_t)i*150}, 70, 70, 0x254364, true, 0, i % 2 == 0 ? true : false);
-	for (int i = 0; i < 100; i++)
-		engine.map_add_rectangle({(float_t)900+i*100, (float_t)i*150}, 70, 70, 0x254364, true, 0, i % 2 == 0 ? true : false);
 
+	for (int x = 1; x <= 200; x++) {
+		for (int i = 0; i < 100; i++) {
+			engine.map_add_rectangle({(float_t)(x*100)+i*100, (float_t)i*150}, 70, 70, 0x254364, true, 0, i % 2 == 0 ? true : false);
+			engine.map_add_rectangle({(float_t)(-x*100)+i*100, (float_t)i*150}, 70, 70, 0x254364, true, 0, i % 2 == 0 ? true : false);
+		}
+	}
 
 	uint32_t now, last_game_step = SDL_GetTicks();
 	float_t delta_time;

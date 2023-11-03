@@ -1,6 +1,6 @@
 #include "../include/engine.h"
 
-void Engine::render_object(Object* object) {
+inline void Engine::render_object(Object* object) {
 	SDL_Rect pos;
 	float_t transform_x = player.object.position.x - PLAYER_CENTER_X;
 	float_t transform_y = player.object.position.y - PLAYER_CENTER_Y;
