@@ -56,14 +56,14 @@ private:
 	// map loading
 	std::vector<Object> map_rectangles;
 public:
+	Player player;
+
+	// init
 	Engine();
 	~Engine();
-
-	Player player;
-	void update_player_animation(Vec2<int32_t> mouse_pos);
-
 	int32_t init_window();
 
+	// texture
 	SDL_Texture* load_texture(const std::string& file_path);  // load a texture from a file
 	void init_textures(
         SDL_Texture* player_texture,
