@@ -78,7 +78,7 @@ public:
 	void update(float_t delta_time);                   // handle game updates
 
 	// rendering
-	inline void render_object(Object* object);  // render an object's texture at a location relative to the position of the player
+	void render_object(Object* object);  // render an object's texture at a location relative to the position of the player
 	void render_scene();                 // render all of the objects, the background, and the player
 
 	// map loading
