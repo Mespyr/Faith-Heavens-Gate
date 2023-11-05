@@ -27,17 +27,18 @@ int32_t main() {
 	// TEST
 	engine.player.object.position = {-300, -300}; // temporarily set player position
 	// manually place a few rectangles for performance testing
-	engine.map_add_rectangle({100, 40}, 200, 100, 0xA164C8, true, 0, false);
-	engine.map_add_rectangle({400, 80}, 400, 200, 0x646464, true, 0, true);
-	engine.map_add_rectangle({400, 80}, 100, 500, 0xA164C8, true, 0, true);
-	engine.map_add_rectangle({500, 280}, 500, 500, 0x646464, true, 0, false);
-	engine.map_add_rectangle({2000, 280}, 500, 500, 0xA164c8, true, 0, false);
-	engine.map_add_rectangle({4500, 280}, 500, 500, 0x646464, true, 0, false);
+	engine.map_add_rectangle({-500, -500}, 200, 200, 0x3c3c3c, false, 5, 0x191919);
+	engine.map_add_rectangle({100, 40}, 200, 100, 0xA164C8, false, 0);
+	engine.map_add_rectangle({400, 80}, 400, 200, 0x646464, true, 0);
+	engine.map_add_rectangle({400, 80}, 100, 500, 0xA164C8, true, 0);
+	engine.map_add_rectangle({500, 280}, 500, 500, 0x646464, false, 0);
+	engine.map_add_rectangle({2000, 280}, 500, 500, 0xA164c8, false, 0);
+	engine.map_add_rectangle({4500, 280}, 500, 500, 0x646464, false, 0);
 
 	for (int x = 1; x <= 200; x++) {
 		for (int i = 0; i < 100; i++) {
-			engine.map_add_rectangle({(float_t)(x*100)+i*100, (float_t)i*150}, 70, 70, 0x323232, true, 0, i % 2 == 0 ? true : false);
-			engine.map_add_rectangle({(float_t)(-x*100)+i*100, (float_t)i*150}, 70, 70, 0x131313, true, 0, i % 2 == 0 ? true : false);
+			engine.map_add_rectangle({(float_t)(x*100)+i*100, (float_t)i*150}, 70, 70, 0x323232, i % 2 == 0 ? true : false, 5);
+			engine.map_add_rectangle({(float_t)(-x*100)+i*100, (float_t)i*150}, 70, 70, 0x131313, i % 2 == 0 ? true : false, 5);
 		}
 	}
 

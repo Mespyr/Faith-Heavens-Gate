@@ -88,8 +88,8 @@ public:
 	    uint32_t width,
 		uint32_t height,
 		uint32_t color,
-		bool filled,           // if rectangle will be filled with one color, or if it will have a border
-		uint32_t border_width, // the amount of pixels the border would be
-		bool collision         // if rectangle should collide with player
+		bool collision, // if rectangle should collide with player
+		uint8_t border_width, // the amount of pixels the border would be
+		uint32_t border_color = 0x000000 // color of the border
 	);
 };

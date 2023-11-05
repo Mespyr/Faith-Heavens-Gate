@@ -35,6 +35,9 @@ void Engine::update(float_t delta_time) {
 	kbd_state = SDL_GetKeyboardState(nullptr);
 	SDL_GetMouseState(&mouse_position.x, &mouse_position.y);
 
+	if (kbd_state[SDL_SCANCODE_C])
+		map_reset();
+	
 	// y velocity
 	if (kbd_state[SDL_SCANCODE_W] || kbd_state[SDL_SCANCODE_S]) {
 		if (kbd_state[SDL_SCANCODE_W])

@@ -11,7 +11,7 @@ void Engine::render_object(Object* object) {
 
 	if (!((pos.x + pos.w <= 0) || (pos.x >= (int32_t) WINDOW_WIDTH) ||
 		  (pos.y + pos.h <= 0) || (pos.y >= (int32_t) WINDOW_HEIGHT)))
-		SDL_RenderCopyEx(renderer, object->texture, &object->current_frame, &pos, object->angle, nullptr, SDL_FLIP_NONE);
+		SDL_RenderCopyEx(renderer, object->texture, &object->current_frame, &pos, 0, nullptr, SDL_FLIP_NONE);
 }
 
 void Engine::render_scene() {
@@ -68,7 +68,7 @@ void Engine::render_scene() {
 		player.object.texture,
 		&player.object.current_frame,
 		&pos,
-		player.object.angle,
+		0,
 		nullptr,
 		SDL_FLIP_NONE
 	);
