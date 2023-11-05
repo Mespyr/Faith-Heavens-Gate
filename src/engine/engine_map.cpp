@@ -8,7 +8,7 @@ void Engine::map_reset() {
 
 void Engine::map_add_rectangle(Vec2<float_t> position, uint32_t width, uint32_t height, uint32_t color, bool filled, uint32_t border_width, bool collision) {
 	Object rect;
-	rect.texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, width, height);
+	rect.texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGB888, SDL_TEXTUREACCESS_STREAMING, width, height);
 	rect.current_frame.x = 0;
 	rect.current_frame.y = 0;
 	rect.current_frame.w = width;
