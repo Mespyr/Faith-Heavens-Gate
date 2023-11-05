@@ -35,41 +35,29 @@ void Engine::update(float_t delta_time) {
 	kbd_state = SDL_GetKeyboardState(nullptr);
 	SDL_GetMouseState(&mouse_position.x, &mouse_position.y);
 
-	// update plater velocity
-	if (kbd_state[SDL_SCANCODE_W] || kbd_state[SDL_SCANCODE_A] || kbd_state[SDL_SCANCODE_S] || kbd_state[SDL_SCANCODE_D]) {
-		// y movement
+	// y velocity
+	if (kbd_state[SDL_SCANCODE_W] || kbd_state[SDL_SCANCODE_S]) {
 		if (kbd_state[SDL_SCANCODE_W])
 			player.set_velocity_y(std::max<float>(player.get_velocity_y() - (PLAYER_ACCEL_SPEED * delta_time), -PLAYER_MAX_SPEED));
-		else if (kbd_state[SDL_SCANCODE_S])
+		if (kbd_state[SDL_SCANCODE_S])
 			player.set_velocity_y(std::min<float>(player.get_velocity_y() + (PLAYER_ACCEL_SPEED * delta_time), PLAYER_MAX_SPEED));
-		// if none of y movement keys are being pressed, slow down
-		else if (player.get_velocity_y() > 0)
-			player.set_velocity_y(std::max<float>(player.get_velocity_y() - (PLAYER_ACCEL_SPEED * delta_time), 0.0f));
-		else if (player.get_velocity_y() < 0)
-			player.set_velocity_y(std::min<float>(player.get_velocity_y() + (PLAYER_ACCEL_SPEED * delta_time), 0.0f));
+	}
+	else if (player.get_velocity_y() > 0)
+		player.set_velocity_y(std::max<float>(player.get_velocity_y() - (PLAYER_ACCEL_SPEED * delta_time), 0.0f));
+	else if (player.get_velocity_y() < 0)
+		player.set_velocity_y(std::min<float>(player.get_velocity_y() + (PLAYER_ACCEL_SPEED * delta_time), 0.0f));
 
-		// x movement
+	// x velocity
+	if (kbd_state[SDL_SCANCODE_A] || kbd_state[SDL_SCANCODE_D]) {
 		if (kbd_state[SDL_SCANCODE_A])
 			player.set_velocity_x(std::max<float>(player.get_velocity_x() - (PLAYER_ACCEL_SPEED * delta_time), -PLAYER_MAX_SPEED));
-		else if (kbd_state[SDL_SCANCODE_D])
+		if (kbd_state[SDL_SCANCODE_D])
 			player.set_velocity_x(std::min<float>(player.get_velocity_x() + (PLAYER_ACCEL_SPEED * delta_time), PLAYER_MAX_SPEED));
-		// if none of x movement keys are being pressed, slow down
-		else if (player.get_velocity_x() > 0)
-			player.set_velocity_x(std::max<float>(player.get_velocity_x() - (PLAYER_ACCEL_SPEED * delta_time), 0.0f));
-		else if (player.get_velocity_x() < 0)
-			player.set_velocity_x(std::min<float>(player.get_velocity_x() + (PLAYER_ACCEL_SPEED * delta_time), 0.0f));
 	}
-	else {
-		// decrease x and y velocity since none of the movement keys are being pressed
-		if (player.get_velocity_y() > 0)
-			player.set_velocity_y(std::max<float>(player.get_velocity_y() - (PLAYER_ACCEL_SPEED * delta_time), 0.0f));
-		else if (player.get_velocity_y() < 0)
-			player.set_velocity_y(std::min<float>(player.get_velocity_y() + (PLAYER_ACCEL_SPEED * delta_time), 0.0f));
-		if (player.get_velocity_x() > 0)
-			player.set_velocity_x(std::max<float>(player.get_velocity_x() - (PLAYER_ACCEL_SPEED * delta_time), 0.0f));
-		else if (player.get_velocity_x() < 0)
-			player.set_velocity_x(std::min<float>(player.get_velocity_x() + (PLAYER_ACCEL_SPEED * delta_time), 0.0f));
-	}
+	else if (player.get_velocity_x() > 0)
+		player.set_velocity_x(std::max<float>(player.get_velocity_x() - (PLAYER_ACCEL_SPEED * delta_time), 0.0f));
+	else if (player.get_velocity_x() < 0)
+		player.set_velocity_x(std::min<float>(player.get_velocity_x() + (PLAYER_ACCEL_SPEED * delta_time), 0.0f));
 
 	// update player animation
 	if (player_animation_timer >= 0.10) {
