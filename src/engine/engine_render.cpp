@@ -55,7 +55,7 @@ void Engine::render_scene() {
 	}
 
 	// render map
-	for (Object rect : map_rectangles)
+	for (Object rect : map_objects)
 		render_object(&rect);
 	
 	// render player at the center of the screen

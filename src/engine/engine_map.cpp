@@ -2,9 +2,9 @@
 #include <cstdint>
 
 void Engine::map_reset() {
-	for (Object rect : map_rectangles)
+	for (Object rect : map_objects)
 		SDL_DestroyTexture(rect.texture);
-	map_rectangles.clear();
+	map_objects.clear();
 }
 
 void Engine::map_add_rectangle(Vec2<float_t> position, uint32_t width, uint32_t height, uint32_t color, bool collision, uint8_t border_width, uint32_t border_color) {
@@ -36,5 +36,5 @@ void Engine::map_add_rectangle(Vec2<float_t> position, uint32_t width, uint32_t 
 
 	SDL_UpdateTexture(rect.texture, nullptr, pixels, width * sizeof(uint32_t));
 	free(pixels);
-	map_rectangles.push_back(rect);
+	map_objects.push_back(rect);
 }

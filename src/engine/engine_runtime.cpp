@@ -10,25 +10,28 @@ void Engine::handle_events() {
 			quit = true;
 }
 
-bool Engine::check_collision(Object* obj1, Object* obj2) {
-	// points for object 1's hitbox
-	float_t obj1_top_left_x = obj1->position.x,
-		obj1_top_left_y = obj1->position.y,
-		obj1_bottom_right_x = obj1->position.x + obj1->current_frame.w,
-		obj1_bottom_right_y = obj1->position.y + obj1->current_frame.h,
-	// points for object 2's hitbox
-		obj2_top_left_x = obj2->position.x,
-		obj2_top_left_y = obj2->position.y,
-		obj2_bottom_right_x = obj2->position.x + obj2->current_frame.w,
-		obj2_bottom_right_y = obj2->position.y + obj2->current_frame.h;
+std::pair<ObjectCollisionSide, float_t> Engine::check_collision(Object* obj1, Object* obj2) {
+	// returns what side OBJ1 is colliding with OBJ2
+	if (obj1->position.x < obj2->position.x + obj2->current_frame.w && obj1->position.x + obj1->current_frame.w > obj2->position.x &&
+		obj1->position.y < obj2->position.y + obj2->current_frame.h && obj1->position.y + obj1->current_frame.h > obj2->position.y) {
 
-	return ((
-			 (obj1_top_left_x > obj2_top_left_x && obj1_top_left_x < obj2_bottom_right_x) ||
-			 (obj1_bottom_right_x > obj2_top_left_x && obj1_bottom_right_x < obj2_bottom_right_x)
-			) && (
-			 (obj1_top_left_y > obj2_top_left_y && obj1_top_left_y < obj2_bottom_right_y) ||
-			 (obj1_bottom_right_y > obj2_top_left_y && obj1_bottom_right_y < obj2_bottom_right_y)
-		   ));
+		// check which side is most intersecting
+		float_t top_collision = abs((obj1->position.y + obj1->current_frame.h) - obj2->position.y),
+			bottom_collision = abs(obj1->position.y - (obj2->position.y + obj2->current_frame.h)),
+			left_collision = abs((obj1->position.x + obj1->current_frame.w) - obj2->position.x),
+			right_collision = abs(obj1->position.x - (obj2->position.x + obj2->current_frame.w));
+		
+		float_t min = top_collision;
+		if (bottom_collision < min) min = bottom_collision;
+		if (left_collision < min) min = left_collision;
+		if (right_collision < min) min = right_collision;
+
+		if (min == top_collision) return {ObjectCollisionSide::TOP_COLLISION, min};
+		if (min == bottom_collision) return {ObjectCollisionSide::BOTTOM_COLLISION, min};
+		if (min == left_collision) return {ObjectCollisionSide::LEFT_COLLISION, min};
+		if (min == right_collision) return {ObjectCollisionSide::RIGHT_COLLISION, min};
+	}
+	return {ObjectCollisionSide::NO_COLLISION, 0};
 }
 
 void Engine::update(float_t delta_time) {
@@ -69,16 +72,32 @@ void Engine::update(float_t delta_time) {
 	}
 	else player_animation_timer += delta_time;
 
-	// update player position and check for collisions
-	player.object.update_position(delta_time);
-
 	// check collision with map
-	for (Object rect : map_rectangles) {
+	for (Object rect : map_objects) {
 		if (!rect.collision) continue;
-		if (check_collision(&player.object, &rect)) {
-			player.object.position -= player.object.velocity * delta_time;
-			player.object.velocity.x = 0;
+		std::pair<ObjectCollisionSide, float_t> collision = check_collision(&player.object, &rect);
+		switch (collision.first) {
+		case ObjectCollisionSide::TOP_COLLISION:
+			player.object.position.y -= collision.second;
 			player.object.velocity.y = 0;
+			break;
+		case ObjectCollisionSide::BOTTOM_COLLISION:
+			player.object.position.y += collision.second;
+			player.object.velocity.y = 0;
+			break;
+		case ObjectCollisionSide::LEFT_COLLISION:
+			player.object.position.x -= collision.second;
+			player.object.velocity.x = 0;
+			break;
+		case ObjectCollisionSide::RIGHT_COLLISION:
+			player.object.position.x += collision.second;
+			player.object.velocity.x = 0;
+			break;
+		case ObjectCollisionSide::NO_COLLISION:
+			break;
 		}
 	}
+
+	// update player position and check for collisions
+	player.object.update_position(delta_time);
 }

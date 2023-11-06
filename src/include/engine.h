@@ -15,6 +15,14 @@
 #include "vec2.h"
 #include "player.h"
 
+enum ObjectCollisionSide {
+	NO_COLLISION,
+	TOP_COLLISION,
+	BOTTOM_COLLISION,
+	LEFT_COLLISION,
+	RIGHT_COLLISION
+};
+
 class Engine {
 private:
 	SDL_Window* window;
@@ -36,7 +44,7 @@ private:
 	const float_t PLAYER_MAX_SPEED = 400.0f;
 	// how much player can accelerate in one second
 	// multiply MAX_SPEED by n to get the acceleration needed to go full speed in 1/n of a second
-	const float PLAYER_ACCEL_SPEED = PLAYER_MAX_SPEED * 3.0f;
+	const float PLAYER_ACCEL_SPEED = PLAYER_MAX_SPEED * 4.0f;
 
 	// background
 	SDL_Texture* background_texture = nullptr;
@@ -54,7 +62,7 @@ private:
 	SDL_Event e;
 
 	// map loading
-	std::vector<Object> map_rectangles;
+	std::vector<Object> map_objects;
 public:
 	Player player;
 
@@ -74,7 +82,7 @@ public:
 	// runtime
 	bool running();
 	void handle_events();
-	bool check_collision(Object* obj1, Object* obj2);  // check if two objects' hitboxes are intersecting with eachother
+	std::pair<ObjectCollisionSide, float_t> check_collision(Object* obj1, Object* obj2);  // check if two objects are intersecting with eachother
 	void update(float_t delta_time);                   // handle game updates
 
 	// rendering
