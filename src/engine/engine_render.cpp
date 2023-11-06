@@ -1,17 +1,16 @@
 #include "../include/engine.h"
 
 void Engine::render_object(Object* object) {
-	SDL_Rect pos;
-	float_t transform_x = player.object.position.x - PLAYER_CENTER_X;
-	float_t transform_y = player.object.position.y - PLAYER_CENTER_Y;
-	pos.x = object->position.x - transform_x;
-	pos.y = object->position.y - transform_y;
-	pos.w = object->current_frame.w;
-	pos.h = object->current_frame.h;
-
-	if (!((pos.x + pos.w <= 0) || (pos.x >= (int32_t) WINDOW_WIDTH) ||
-		  (pos.y + pos.h <= 0) || (pos.y >= (int32_t) WINDOW_HEIGHT)))
+	if (is_visible(object)) {
+		SDL_Rect pos;
+		float_t transform_x = player.object.position.x - PLAYER_CENTER_X;
+		float_t transform_y = player.object.position.y - PLAYER_CENTER_Y;
+		pos.x = object->position.x - transform_x;
+		pos.y = object->position.y - transform_y;
+		pos.w = object->current_frame.w;
+		pos.h = object->current_frame.h;
 		SDL_RenderCopyEx(renderer, object->texture, &object->current_frame, &pos, 0, nullptr, SDL_FLIP_NONE);
+	}
 }
 
 void Engine::render_scene() {

@@ -79,11 +79,14 @@ public:
 	);  // initialize all textures and objects
 	void set_background_texture(SDL_Texture* bg_texture);     // set the background texture
 
+	// util
+	bool is_visible(Object* object); // check if object can be visible on the window
+	std::pair<ObjectCollisionSide, float_t> check_collision(Object* obj1, Object* obj2);  // check if two objects are intersecting with eachother
+
 	// runtime
 	bool running();
 	void handle_events();
-	std::pair<ObjectCollisionSide, float_t> check_collision(Object* obj1, Object* obj2);  // check if two objects are intersecting with eachother
-	void update(float_t delta_time);                   // handle game updates
+	void update(float_t delta_time);
 
 	// rendering
 	void render_object(Object* object);  // render an object's texture at a location relative to the position of the player

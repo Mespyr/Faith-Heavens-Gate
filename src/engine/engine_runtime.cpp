@@ -10,30 +10,6 @@ void Engine::handle_events() {
 			quit = true;
 }
 
-std::pair<ObjectCollisionSide, float_t> Engine::check_collision(Object* obj1, Object* obj2) {
-	// returns what side OBJ1 is colliding with OBJ2
-	if (obj1->position.x < obj2->position.x + obj2->current_frame.w && obj1->position.x + obj1->current_frame.w > obj2->position.x &&
-		obj1->position.y < obj2->position.y + obj2->current_frame.h && obj1->position.y + obj1->current_frame.h > obj2->position.y) {
-
-		// check which side is most intersecting
-		float_t top_collision = abs((obj1->position.y + obj1->current_frame.h) - obj2->position.y),
-			bottom_collision = abs(obj1->position.y - (obj2->position.y + obj2->current_frame.h)),
-			left_collision = abs((obj1->position.x + obj1->current_frame.w) - obj2->position.x),
-			right_collision = abs(obj1->position.x - (obj2->position.x + obj2->current_frame.w));
-		
-		float_t min = top_collision;
-		if (bottom_collision < min) min = bottom_collision;
-		if (left_collision < min) min = left_collision;
-		if (right_collision < min) min = right_collision;
-
-		if (min == top_collision) return {ObjectCollisionSide::TOP_COLLISION, min};
-		if (min == bottom_collision) return {ObjectCollisionSide::BOTTOM_COLLISION, min};
-		if (min == left_collision) return {ObjectCollisionSide::LEFT_COLLISION, min};
-		if (min == right_collision) return {ObjectCollisionSide::RIGHT_COLLISION, min};
-	}
-	return {ObjectCollisionSide::NO_COLLISION, 0};
-}
-
 void Engine::update(float_t delta_time) {
 	kbd_state = SDL_GetKeyboardState(nullptr);
 	SDL_GetMouseState(&mouse_position.x, &mouse_position.y);
@@ -75,6 +51,7 @@ void Engine::update(float_t delta_time) {
 	// check collision with map
 	for (Object rect : map_objects) {
 		if (!rect.collision) continue;
+		if (!is_visible(&rect)) continue;
 		std::pair<ObjectCollisionSide, float_t> collision = check_collision(&player.object, &rect);
 		switch (collision.first) {
 		case ObjectCollisionSide::TOP_COLLISION:
