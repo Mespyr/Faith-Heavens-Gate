@@ -25,7 +25,7 @@ int32_t Engine::init_window() {
 		return 1;
 	}
 
-	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if (renderer == nullptr) {
 		log_error(std::cout, "SDL_CreateRenderer");
 		return 1;

@@ -8,6 +8,11 @@ void Engine::map_reset() {
 }
 
 void Engine::map_add_rectangle(Vec2<float_t> position, uint32_t width, uint32_t height, uint32_t color, bool collision, uint8_t border_width, uint32_t border_color) {
+	if (border_width >= width || border_width >= height) {
+		log_error(error_log_ostream, "Can't create a rectangle with border larger than the rectangle itself.");
+		return;
+	}
+
 	Object rect;
 	rect.texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGB888, SDL_TEXTUREACCESS_STREAMING, width, height);
 	rect.current_frame.x = 0;

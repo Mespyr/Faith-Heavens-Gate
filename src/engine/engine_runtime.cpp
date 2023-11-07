@@ -50,8 +50,7 @@ void Engine::update(float_t delta_time) {
 
 	// check collision with map
 	for (Object rect : map_objects) {
-		if (!rect.collision) continue;
-		if (!is_visible(&rect)) continue;
+		if (!rect.collision || !is_visible(&rect)) continue;
 		std::pair<ObjectCollisionSide, float_t> collision = check_collision(&player.object, &rect);
 		switch (collision.first) {
 		case ObjectCollisionSide::TOP_COLLISION:

@@ -46,6 +46,8 @@ private:
 	// multiply MAX_SPEED by n to get the acceleration needed to go full speed in 1/n of a second
 	const float PLAYER_ACCEL_SPEED = PLAYER_MAX_SPEED * 4.0f;
 
+	std::ostream& error_log_ostream = std::cout;
+
 	// background
 	SDL_Texture* background_texture = nullptr;
 	Vec2<float_t> background_position = {0, 0}; // positon of the top-right copy of the background. the positon of other copies of the background tile will be based off of this
