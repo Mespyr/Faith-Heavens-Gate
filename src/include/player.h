@@ -9,6 +9,8 @@ class Player {
 private:
 	SDL_Rect left_clips[8];
 	SDL_Rect right_clips[8];
+	SDL_Rect up_clips[8];
+	SDL_Rect down_clips[8];
 	uint32_t animation_frame_index = 0;
 public:
 	Player() {}

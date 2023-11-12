@@ -102,7 +102,7 @@ public:
 		uint32_t height,
 		uint32_t color,
 		bool collision, // if rectangle should collide with player
-		uint8_t border_width, // the amount of pixels the border would be
+		uint8_t border_width = 0, // the amount of pixels the border would be
 		uint32_t border_color = 0x000000 // color of the border
 	);
 };
