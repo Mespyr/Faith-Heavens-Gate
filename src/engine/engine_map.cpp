@@ -1,5 +1,4 @@
 #include "../include/engine.h"
-#include <cstdint>
 
 void Engine::map_reset() {
 	for (Object rect : map_objects)
@@ -14,7 +13,7 @@ void Engine::map_add_rectangle(Vec2<float_t> position, uint32_t width, uint32_t 
 	}
 
 	Object rect;
-	rect.texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGB888, SDL_TEXTUREACCESS_STREAMING, width, height);
+	rect.texture = window.create_texture(width, height);
 	rect.current_frame.x = 0;
 	rect.current_frame.y = 0;
 	rect.current_frame.w = width;
@@ -24,7 +23,6 @@ void Engine::map_add_rectangle(Vec2<float_t> position, uint32_t width, uint32_t 
 
 	uint32_t* pixels = (uint32_t*) malloc(width * height * sizeof(uint32_t));
 
-	// since there is no border, we can just fill the whole rectangle with one color
 	if (border_width == 0)
 		for (uint32_t p = 0; p < (width * height); p++)
 			pixels[p] = color;
@@ -42,4 +40,9 @@ void Engine::map_add_rectangle(Vec2<float_t> position, uint32_t width, uint32_t 
 	SDL_UpdateTexture(rect.texture, nullptr, pixels, width * sizeof(uint32_t));
 	free(pixels);
 	map_objects.push_back(rect);
+}
+
+void Engine::set_background_texture(SDL_Texture* bg_texture) {
+	background_texture = bg_texture;
+	background_position = {0, 0};
 }

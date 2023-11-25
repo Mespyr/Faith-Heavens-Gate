@@ -17,7 +17,6 @@ void Engine::update(float_t delta_time) {
 	if (kbd_state[SDL_SCANCODE_C])
 		map_reset();
 	
-	// y velocity
 	if (kbd_state[SDL_SCANCODE_W] || kbd_state[SDL_SCANCODE_S]) {
 		if (kbd_state[SDL_SCANCODE_W])
 			player.set_velocity_y(std::max<float>(player.get_velocity_y() - (PLAYER_ACCEL_SPEED * delta_time), -PLAYER_MAX_SPEED));
@@ -29,7 +28,6 @@ void Engine::update(float_t delta_time) {
 	else if (player.get_velocity_y() < 0)
 		player.set_velocity_y(std::min<float>(player.get_velocity_y() + (PLAYER_ACCEL_SPEED * delta_time), 0.0f));
 
-	// x velocity
 	if (kbd_state[SDL_SCANCODE_A] || kbd_state[SDL_SCANCODE_D]) {
 		if (kbd_state[SDL_SCANCODE_A])
 			player.set_velocity_x(std::max<float>(player.get_velocity_x() - (PLAYER_ACCEL_SPEED * delta_time), -PLAYER_MAX_SPEED));
@@ -41,14 +39,12 @@ void Engine::update(float_t delta_time) {
 	else if (player.get_velocity_x() < 0)
 		player.set_velocity_x(std::min<float>(player.get_velocity_x() + (PLAYER_ACCEL_SPEED * delta_time), 0.0f));
 
-	// update player animation
 	if (player_animation_timer >= 0.09) {
-		player.update_animation_frame(mouse_position, WINDOW_CENTER_X, WINDOW_CENTER_Y);
+		player.update_animation_frame(mouse_position, window.center_x(), window.center_y());
 		player_animation_timer = 0;
 	}
 	else player_animation_timer += delta_time;
 
-	// check collision with map
 	for (Object rect : map_objects) {
 		if (!rect.collision || !is_visible(&rect)) continue;
 		std::pair<ObjectCollisionSide, float_t> collision = check_collision(&player.object, &rect);
@@ -74,6 +70,5 @@ void Engine::update(float_t delta_time) {
 		}
 	}
 
-	// update player position and check for collisions
 	player.object.update_position(delta_time);
 }

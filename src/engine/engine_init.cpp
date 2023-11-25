@@ -1,35 +1,24 @@
 #include "../include/engine.h"
 
-Engine::Engine() {
+Engine::Engine(std::ostream &error_log_ostream, const char* name, uint32_t width, uint32_t height)
+	: window(error_log_ostream, name, width, height),
+	  error_log_ostream(error_log_ostream) {
+
+	if (window.fail_init) {
+		fail_init = true;
+		return;
+	}
+
+	PLAYER_CENTER_X = window.center_x() - (PLAYER_WIDTH / 2);
+	PLAYER_CENTER_Y = window.center_y() - (PLAYER_HEIGHT / 2);
 	SDL_ShowCursor(SDL_FALSE);
 }
 
-Engine::~Engine() {
-	SDL_DestroyRenderer(renderer);
-	SDL_DestroyWindow(window);
-}
-
-int32_t Engine::init_window() {
-	window = SDL_CreateWindow(
-	    "Pants",
-		SDL_WINDOWPOS_CENTERED,
-		SDL_WINDOWPOS_CENTERED,
-		WINDOW_WIDTH,
-		WINDOW_HEIGHT,
-		//SDL_WINDOW_FULLSCREEN_DESKTOP
-		SDL_WINDOW_SHOWN
-	);
-
-	if (window == nullptr) {
-		log_error(std::cout, "SDL_CreateWindow");
-		return 1;
-	}
-
-	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-	if (renderer == nullptr) {
-		log_error(std::cout, "SDL_CreateRenderer");
-		return 1;
-	}
-
-	return 0;
+void Engine::init_textures(SDL_Texture* player_texture, SDL_Texture* crosshair_texture_) {
+	player.init_textures(player_texture);
+	crosshair_texture = crosshair_texture_;
+	crosshair_frame.w = 16;
+	crosshair_frame.h = 16;
+	crosshair_frame.x = 0;
+	crosshair_frame.y = 0;
 }

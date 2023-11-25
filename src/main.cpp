@@ -13,18 +13,18 @@ int32_t main() {
 		return 1;
 
 	////////////////// initialize engine and textures ///////////////////
-	Engine engine;
-	if (engine.init_window() != 0)
+	Engine engine(std::cerr, "Pants", 1920, 1080);
+	if (engine.fail_init)
 		return 1;
 
-	SDL_Texture* player_texture = engine.load_texture("assets/player.png");
-	SDL_Texture* crosshair_texture = engine.load_texture("assets/crosshair.png");
-	SDL_Texture* bg_texture = engine.load_texture("assets/tileset.png");
+	SDL_Texture* player_texture = engine.window.load_texture("assets/player.png");
+	SDL_Texture* crosshair_texture = engine.window.load_texture("assets/crosshair.png");
+	SDL_Texture* bg_texture = engine.window.load_texture("assets/tileset.png");
 	engine.init_textures(player_texture, crosshair_texture);
-	engine.set_background_texture(bg_texture);
 	/////////////////////////////////////////////////////////////////////
 
 	// TEST
+	engine.set_background_texture(bg_texture);
 	engine.player.object.position = {352, 400}; // temporarily set player position
 	// manually place a few rectangles for performance testing
 	//engine.map_add_rectangle({-500, -500}, 200, 200, 0x3c3c3c, false, 5, 0x191919);
@@ -49,6 +49,7 @@ int32_t main() {
 	engine.map_add_rectangle({790, 0}, 10, 1200, 0x000000, true);
 	engine.map_add_rectangle({0, 1190}, 300, 10, 0x000000, true);
 	engine.map_add_rectangle({500, 1190}, 300, 10, 0x000000, true);
+	engine.map_add_rectangle({200, 200}, 200, 200, 0x000000, true, 20, 0xFFFFFF);
 	
 	uint32_t now, last_game_step = SDL_GetTicks();
 	float_t delta_time;
@@ -67,7 +68,6 @@ int32_t main() {
 	}
 
 	engine.map_reset();
-
 	SDL_DestroyTexture(player_texture);
 	SDL_DestroyTexture(crosshair_texture);
 	SDL_DestroyTexture(bg_texture);

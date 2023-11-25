@@ -1,31 +1,32 @@
 #include "include/player.h"
+#include <cstdint>
 
 void Player::init_textures(SDL_Texture* player_texture) {
 	object.texture = player_texture;
 
 	// left
-	for (int i = 0; i < 8; i++) {
+	for (uint32_t i = 0; i < PLAYER_ANIMATION_FRAME_COUNT; i++) {
 		left_clips[i].x = i * 48;
 		left_clips[i].y = 0; // 48 * 0
 		left_clips[i].w = 48;
 		left_clips[i].h = 48;
 	}
 	// right
-	for (int i = 0; i < 8; i++) {
+	for (uint32_t i = 0; i < PLAYER_ANIMATION_FRAME_COUNT; i++) {
 		right_clips[i].x = i * 48;
 		right_clips[i].y = 48; // 48 * 1
 		right_clips[i].w = 48;
 		right_clips[i].h = 48;
 	}
 	// down
-	for (int i = 0; i < 8; i++) {
+	for (uint32_t i = 0; i < PLAYER_ANIMATION_FRAME_COUNT; i++) {
 		down_clips[i].x = i * 48;
 		down_clips[i].y = 96; // 48 * 2
 		down_clips[i].w = 48;
 		down_clips[i].h = 48;
 	}
 	// up
-	for (int i = 0; i < 8; i++) {
+	for (uint32_t i = 0; i < PLAYER_ANIMATION_FRAME_COUNT; i++) {
 		up_clips[i].x = i * 48;
 		up_clips[i].y = 144; // 48 * 3
 		up_clips[i].w = 48;
@@ -40,7 +41,7 @@ void Player::update_animation_frame(Vec2<int32_t> mouse_pos, uint32_t window_cen
 	// change animation frame
 	if (object.velocity.x != 0 || object.velocity.y != 0) {
 		animation_frame_index += 1;
-		if (animation_frame_index == 8) animation_frame_index = 0;
+		if (animation_frame_index == PLAYER_ANIMATION_FRAME_COUNT) animation_frame_index = 0;
 	}
 	else animation_frame_index = 0;
 	float_t player_mouse_angle = atan2((int32_t) window_center_y - mouse_pos.y, (int32_t) window_center_x - mouse_pos.x) * 180 / 3.1415;
