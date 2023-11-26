@@ -6,6 +6,15 @@ void Engine::map_reset() {
 	map_objects.clear();
 }
 
+void Engine::set_player_position(Vec2<float_t> position) {
+	player.object.position = position;
+}
+
+void Engine::set_background_texture(SDL_Texture* bg_texture) {
+	background_texture = bg_texture;
+	background_position = {0, 0};
+}
+
 void Engine::map_add_rectangle(Vec2<float_t> position, uint32_t width, uint32_t height, uint32_t color, bool collision, uint8_t border_width, uint32_t border_color) {
 	if (border_width >= width || border_width >= height) {
 		log_error(error_log_ostream, "Can't create a rectangle with border larger than the rectangle itself.");
@@ -13,7 +22,7 @@ void Engine::map_add_rectangle(Vec2<float_t> position, uint32_t width, uint32_t 
 	}
 
 	Object rect;
-	rect.texture = window.create_texture(width, height);
+	rect.texture = window->create_texture(width, height);
 	rect.current_frame.x = 0;
 	rect.current_frame.y = 0;
 	rect.current_frame.w = width;
@@ -42,7 +51,4 @@ void Engine::map_add_rectangle(Vec2<float_t> position, uint32_t width, uint32_t 
 	map_objects.push_back(rect);
 }
 
-void Engine::set_background_texture(SDL_Texture* bg_texture) {
-	background_texture = bg_texture;
-	background_position = {0, 0};
-}
+

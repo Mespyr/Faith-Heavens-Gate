@@ -28,11 +28,10 @@ enum ObjectCollisionSide {
 class Engine {
 public:
 	bool fail_init = false;
-	Window window;
-	Player player;
 
 	// init
-	Engine(std::ostream& error_log_ostream, const char* name, uint32_t width, uint32_t height);
+	Engine(std::ostream& error_log_ostream);
+	void set_window(Window* window_);
 	void init_textures(
         SDL_Texture* player_texture,
 		SDL_Texture* crosshair_texture_
@@ -53,6 +52,7 @@ public:
 
 	// map loading
 	void map_reset();
+	void set_player_position(Vec2<float_t> position);
 	void set_background_texture(SDL_Texture* bg_texture);
 	void map_add_rectangle(
 		Vec2<float_t> position,
@@ -64,6 +64,9 @@ public:
 		uint32_t border_color = 0x000000 // color of the border
 	);
 private:
+	Window* window;
+	Player player;
+
 	static const uint32_t PLAYER_WIDTH = 48;
 	static const uint32_t PLAYER_HEIGHT = 48;
 	uint32_t PLAYER_CENTER_X;

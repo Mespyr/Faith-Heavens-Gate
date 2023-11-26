@@ -3,8 +3,8 @@
 bool Engine::is_visible(Object* object) {
 	int32_t screen_x = object->position.x - (player.object.position.x - PLAYER_CENTER_X);
 	int32_t screen_y = object->position.y - (player.object.position.y - PLAYER_CENTER_Y);
-	return (!((screen_x + object->current_frame.w <= 0) || (screen_x >= (int32_t) window.width()) ||
-			  (screen_y + object->current_frame.h <= 0) || (screen_y >= (int32_t) window.height())));
+	return (!((screen_x + object->current_frame.w <= 0) || (screen_x >= (int32_t) window->width()) ||
+			  (screen_y + object->current_frame.h <= 0) || (screen_y >= (int32_t) window->height())));
 }
 
 std::pair<ObjectCollisionSide, float_t> Engine::check_collision(Object* obj1, Object* obj2) {

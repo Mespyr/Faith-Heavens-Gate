@@ -40,7 +40,7 @@ void Engine::update(float_t delta_time) {
 		player.set_velocity_x(std::min<float>(player.get_velocity_x() + (PLAYER_ACCEL_SPEED * delta_time), 0.0f));
 
 	if (player_animation_timer >= 0.09) {
-		player.update_animation_frame(mouse_position, window.center_x(), window.center_y());
+		player.update_animation_frame(mouse_position, window->center_x(), window->center_y());
 		player_animation_timer = 0;
 	}
 	else player_animation_timer += delta_time;

@@ -9,11 +9,11 @@ void Engine::render_object(Object* object) {
 	pos.y = object->position.y - transform_y;
 	pos.w = object->current_frame.w;
 	pos.h = object->current_frame.h;
-	window.render_texture(object->texture, &object->current_frame, &pos);
+	window->render_texture(object->texture, &object->current_frame, &pos);
 }
 
 void Engine::render_scene() {
-	window.clear();
+	window->clear();
 	SDL_Rect pos;
 
 	if (background_texture != nullptr) {
@@ -25,27 +25,27 @@ void Engine::render_scene() {
 		// background_position represents the position of the top-right
 		// texture we are drawing
 		if (bg_screen_position_y > 0)
-			background_position.y -= window.height();
-		else if (-bg_screen_position_y > window.height())
-			background_position.y += window.height();
+			background_position.y -= window->height();
+		else if (-bg_screen_position_y > window->height())
+			background_position.y += window->height();
 
 		if (bg_screen_position_x < 0)
-			background_position.x += window.width();
-		else if (bg_screen_position_x > window.width())
-			background_position.x -= window.width();
+			background_position.x += window->width();
+		else if (bg_screen_position_x > window->width())
+			background_position.x -= window->width();
 		
 		pos.x = background_position.x - transform_x;
 		pos.y = background_position.y - transform_y;
-		pos.w = window.width();
-		pos.h = window.height();
+		pos.w = window->width();
+		pos.h = window->height();
 
-		window.render_texture(background_texture, nullptr, &pos);
-		pos.y += window.height();
-		window.render_texture(background_texture, nullptr, &pos);
-		pos.x -= window.width();
-		window.render_texture(background_texture, nullptr, &pos);
-		pos.y -= window.height();
-		window.render_texture(background_texture, nullptr, &pos);
+		window->render_texture(background_texture, nullptr, &pos);
+		pos.y += window->height();
+		window->render_texture(background_texture, nullptr, &pos);
+		pos.x -= window->width();
+		window->render_texture(background_texture, nullptr, &pos);
+		pos.y -= window->height();
+		window->render_texture(background_texture, nullptr, &pos);
 	}
 
 	for (Object rect : map_objects)
@@ -55,11 +55,11 @@ void Engine::render_scene() {
 	pos.y = PLAYER_CENTER_Y;
 	pos.w = PLAYER_WIDTH;
 	pos.h = PLAYER_HEIGHT;
-	window.render_texture(player.object.texture, &player.object.current_frame, &pos);
+	window->render_texture(player.object.texture, &player.object.current_frame, &pos);
 	pos.x = mouse_position.x;
 	pos.y = mouse_position.y;
 	pos.w = 32;
 	pos.h = 32;
-	window.render_texture(crosshair_texture, nullptr, &pos);
-	window.present();
+	window->render_texture(crosshair_texture, nullptr, &pos);
+	window->present();
 }
