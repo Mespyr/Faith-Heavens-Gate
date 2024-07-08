@@ -64,7 +64,7 @@ public:
 		uint32_t border_color = 0x000000 // color of the border
 	);
 private:
-	Window* window;
+	std::unique_ptr<Window> window;
 	Player player;
 
 	static const uint32_t PLAYER_WIDTH = 48;

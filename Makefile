@@ -5,34 +5,30 @@ SDL_INCLUDE=-I/usr/local/include
 CPP=g++
 CPPFLAGS=-Wall -Wextra -pedantic $(SDL_INCLUDE) -D_REENTRANT
 LDFLAGS=$(SDL_LIB)
-# directories
-SRC_DIR=src
-ENGINE_SRC_DIR=src/engine
-OBJ_DIR=obj
-INCLUDE_DIR=src/include
-# src files
-SRC_FILES=$(wildcard $(SRC_DIR)/*.cpp)
-ENGINE_SRC_FILES=$(wildcard $(ENGINE_SRC_DIR)/*.cpp)
-# object files
-OBJ_FILES=$(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRC_FILES))
-ENGINE_OBJ_FILES=$(patsubst $(ENGINE_SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(ENGINE_SRC_FILES))
 
-HDR_FILES=$(wildcard $(INCLUDE_DIR)/*.h)
+SRC_DIRS=src src/engine
+SRC_FILES=$(foreach dir, $(SRC_DIRS), $(wildcard $(dir)/*.cpp))
+HEADERS=$(foreach dir, $(SRC_DIRS), $(wildcard $(dir)/*.hpp))
+
+OBJ_DIR=obj
+OBJ_FILES=$(foreach dir, $(SRC_DIRS), \
+  $(patsubst $(dir)/%.cpp, $(OBJ_DIR)/%.o, $(wildcard $(dir)/*.cpp)))
 BIN=pants
 
+define compile_dir
+$(OBJ_DIR)/%.o: $(1)/%.cpp $(OBJ_DIR)
+	$(CPP) $(CPPFLAGS) -c $$< -o $$@
+endef
+$(foreach dir, $(SRC_DIRS), $(eval $(call compile_dir, $(dir))))
+
 all: $(BIN)
+$(BIN): $(OBJ_FILES) $(OBJ_DIR)
+	$(CPP) $(OBJ_FILES) -o $@ $(LDFLAGS)
 
-$(BIN): $(OBJ_FILES) $(ENGINE_OBJ_FILES) $(OBJ_DIR)
-	$(CPP) $(OBJ_FILES) $(ENGINE_OBJ_FILES) -o $@ $(LDFLAGS)
-
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp $(OBJ_DIR)
-	$(CPP) $(CPPFLAGS) -c $< -o $@
-$(OBJ_DIR)/%.o: $(ENGINE_SRC_DIR)/%.cpp $(OBJ_DIR)
-	$(CPP) $(CPPFLAGS) -c $< -o $@
+format: $(SRC_FILES) $(HEADERS)
+	clang-format -i $(SRC_FILES) $(HEADERS) -style=file
 
 $(OBJ_DIR):
 	mkdir -p $@
-
 clean:
-	$(RM) -r $(OBJ_DIR)
-	$(RM) $(BIN)
+	$(RM) -r $(OBJ_DIR) $(BIN)
