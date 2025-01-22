@@ -12,6 +12,6 @@ struct SDL_Deleter {
     void operator()(SDL_Texture *p);
 };
 
-void log_error(std::ostream &error_log, const std::string &msg);
-void log_sdl_error(std::ostream &error_log, const std::string &sdl_function);
-bool init_lib(std::ostream &error_log);
+void log_error(std::ostream &log, const std::string &msg);
+void log_sdl_error(std::ostream &log, const std::string &sdl_function);
+bool init_lib(std::ostream &log);

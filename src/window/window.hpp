@@ -15,35 +15,28 @@
 
 class Window {
   public:
-    Window(std::ostream& error_log_ostream, const std::string& name,
-           uint32_t width, uint32_t height);
+    Window(std::ostream& log, const std::string& name, uint32_t width,
+           uint32_t height);
 
-    explicit operator bool() const { return !failed; }
-
-    uint32_t width();
-    uint32_t height();
-    uint32_t center_x();
-    uint32_t center_y();
+    explicit operator bool() const { return !quit; }
 
     std::unique_ptr<SDL_Texture, SDL_Deleter> load_texture(
         const std::string& file_path);
-    std::unique_ptr<SDL_Texture, SDL_Deleter> create_texture(uint32_t width,
-                                                             uint32_t height);
 
-    void render_texture(std::unique_ptr<SDL_Texture, SDL_Deleter> texture,
-                        SDL_Rect frame, SDL_Rect position);
     void clear();
-    void present();
+    void draw();
+    void handle_events();
+    void set(uint32_t x, uint32_t y, int32_t color);
 
   private:
-    bool          failed = false;
-    std::ostream& error_log;
+    bool          quit = false;
+    std::ostream& log;
 
     std::unique_ptr<SDL_Window, SDL_Deleter>   window;
     std::unique_ptr<SDL_Renderer, SDL_Deleter> renderer;
+    std::unique_ptr<SDL_Texture, SDL_Deleter>  screen_texture;
 
-    const uint32_t WIDTH;
-    const uint32_t HEIGHT;
-    const uint32_t CENTER_X;
-    const uint32_t CENTER_Y;
+    const uint32_t        WINDOW_WIDTH, WINDOW_HEIGHT;
+    static const uint32_t GAME_WIDTH = 256, GAME_HEIGHT = 256;
+    int32_t               PIXELS[GAME_WIDTH * GAME_HEIGHT];
 };
