@@ -1,10 +1,10 @@
-#include <SDL2/SDL_render.h>
-#include <SDL2/SDL_timer.h>
+#include <SDL2/SDL.h>
 
 #include <cstdint>
 #include <iostream>
 #include <ostream>
 
+#include "palette.hpp"
 #include "util.hpp"
 #include "window/window.hpp"
 
@@ -13,31 +13,37 @@ int32_t main() {
 
     if (!init_lib(log)) exit(1);
 
-    Window window(log, "Faith: Heaven's Gate", 1000, 800);
+    Palette _default(0x0e0e0e, 0x404040, 0x696969, 0x808080, 0xA9A9A9, 0xF0F0F0,
+                     0x800000, 0xFF0000, 0xFF8C00, 0xFFFF00, 0xADFF2F, 0x008000,
+                     0x008080, 0x00FFFF, 0x0000FF, 0x4B0082, 0x800080, 0xFF1493,
+                     0xFF69B4, 0xFA8072);
+
+    Window window(log, "Faith: Heaven's Gate", 1280, 720, _default);
     if (!window) exit(1);
 
     const uint64_t ticks_per_15_fps = (1000 / 15);
-    uint64_t       ticks_now, ticks_last_frame = SDL_GetTicks64();
+    uint64_t       ticks_now, ticks_last_frame = SDL_GetTicks();
 
     do {
         window.handle_events();
-        ticks_now = SDL_GetTicks64();
+        ticks_now = SDL_GetTicks();
         if ((ticks_now - ticks_last_frame) < ticks_per_15_fps)
             SDL_Delay(1);
         else {
             window.clear();
-            window.set(200, 200, 0xFFFFFFFF);
-            window.set(200, 201, 0xFFFFFFFF);
-            window.set(200, 202, 0xFFFFFFFF);
-            window.set(200, 203, 0xFFFFFFFF);
-            window.set(201, 200, 0xFFFFFFFF);
-            window.set(202, 200, 0xFFFFFFFF);
-            window.set(203, 200, 0xFFFFFFFF);
 
-            window.set(255, 255, 0x00FFFFFF);
-            window.set(0, 0, 0x00FFFFFF);
-            window.set(0, 255, 0x00FFFFFF);
-            window.set(255, 0, 0x00FFFFFF);
+            // a quick cross
+            for (uint32_t x = 0; x < 30; x++) {
+                for (uint32_t b = 0; b < 8; b++) {
+                    window.set(x + 20, b + 20, Palette::ORANGE);
+                }
+            }
+            for (uint32_t x = 0; x < 8; x++) {
+                for (uint32_t b = 0; b < 44; b++) {
+                    window.set(x + 31, b + 10, Palette::ORANGE);
+                }
+            }
+
             window.draw();
             ticks_last_frame = ticks_now;
         }

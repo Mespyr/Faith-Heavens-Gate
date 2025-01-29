@@ -13,7 +13,7 @@ void log_sdl_error(std::ostream &log, const std::string &sdl_function) {
 }
 
 bool init_lib(std::ostream &log) {
-    if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         log_error(log, "SDL_Init");
         return false;
     }
