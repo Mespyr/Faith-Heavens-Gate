@@ -26,9 +26,10 @@ class Window {
     void set(uint32_t x, uint32_t y, Palette::Color color);
 
   private:
-    const uint32_t WINDOW_WIDTH, WINDOW_HEIGHT;
-    bool           quit = false;
-    std::ostream&  log;
+    const std::string& name;
+    const uint32_t     WINDOW_WIDTH, WINDOW_HEIGHT;
+    bool               quit = false;
+    std::ostream&      log;
 
     // native game resolution
     static const uint32_t GAME_WIDTH = 240, GAME_HEIGHT = 135;
@@ -39,4 +40,9 @@ class Window {
     std::unique_ptr<SDL_Texture, SDL_Deleter>  game_texture;
     std::unique_ptr<SDL_Texture, SDL_Deleter>  scanline_texture;
     Palette                                    palette;
+
+    bool create_window();
+    bool create_renderer();
+    bool create_game_texture();
+    bool create_scanline_texture();
 };

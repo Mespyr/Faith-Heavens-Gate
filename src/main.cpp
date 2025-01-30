@@ -44,6 +44,20 @@ int32_t main() {
                 }
             }
 
+            window.set(100, 99, Palette::HOT_PINK);
+            window.set(101, 99, Palette::HOT_PINK);
+            window.set(102, 99, Palette::HOT_PINK);
+            window.set(103, 99, Palette::HOT_PINK);
+            window.set(104, 99, Palette::HOT_PINK);
+            window.set(105, 99, Palette::HOT_PINK);
+
+            window.set(100, 100, Palette::HOT_PINK);
+            window.set(101, 100, Palette::HOT_PINK);
+            window.set(102, 100, Palette::HOT_PINK);
+            window.set(103, 100, Palette::HOT_PINK);
+            window.set(104, 100, Palette::HOT_PINK);
+            window.set(105, 100, Palette::HOT_PINK);
+
             window.draw();
             ticks_last_frame = ticks_now;
         }
