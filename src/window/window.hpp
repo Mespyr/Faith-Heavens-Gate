@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h>
 
 #include <cstdint>
+#include <cstring>
 #include <memory>
 #include <ostream>
 #include <string>
@@ -34,6 +35,8 @@ class Window {
     // native game resolution
     static const uint32_t GAME_WIDTH = 240, GAME_HEIGHT = 135;
     int32_t               PIXELS[GAME_WIDTH * GAME_HEIGHT];
+    static const uint32_t SCANLINE_WIDTH = GAME_WIDTH * 2,
+                          SCANLINE_HEIGHT = GAME_HEIGHT * 2;
 
     std::unique_ptr<SDL_Window, SDL_Deleter>   window;
     std::unique_ptr<SDL_Renderer, SDL_Deleter> renderer;

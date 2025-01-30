@@ -48,7 +48,7 @@ bool Window::create_scanline_texture() {
     // using TEXTUREACCESS_TARGET to draw using the renderer
     SDL_Texture* scanline_texture_ptr = SDL_CreateTexture(
         renderer.get(), SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
-        GAME_WIDTH * 2, GAME_HEIGHT * 2);
+        SCANLINE_WIDTH, SCANLINE_HEIGHT);
     if (scanline_texture_ptr == nullptr) {
         log_sdl_error(log, "SDL_CreateTexture");
         return false;
@@ -62,7 +62,7 @@ bool Window::create_scanline_texture() {
     SDL_SetRenderDrawColor(renderer.get(), 0xFF, 0xFF, 0xFF, 0x00);
     SDL_RenderFillRect(renderer.get(), NULL);
     SDL_SetRenderDrawColor(renderer.get(), 0, 0, 0, 0x40);
-    for (uint32_t i = 0; i < GAME_HEIGHT * 2; i += 2)
-        SDL_RenderDrawLine(renderer.get(), 0, i, GAME_WIDTH * 2, i);
+    for (uint32_t i = 0; i < SCANLINE_HEIGHT; i += 2)
+        SDL_RenderDrawLine(renderer.get(), 0, i, SCANLINE_WIDTH, i);
     return true;
 }

@@ -15,5 +15,5 @@ void Window::set(uint32_t x, uint32_t y, Palette::Color color) {
 }
 
 void Window::clear() {
-    memset(PIXELS, palette.get(Palette::BLACK), sizeof(PIXELS));
+    std::memset(PIXELS, palette.get(Palette::BLACK), sizeof(PIXELS));
 }
