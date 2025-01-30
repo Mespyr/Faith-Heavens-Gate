@@ -1,5 +1,5 @@
-# SDL2
-SDL_LIB=-L/usr/lib -lSDL2
+# SDL3
+SDL_LIB=-L/usr/lib -lSDL3
 SDL_INCLUDE=-I/usr/local/include
 
 CPP=clang++

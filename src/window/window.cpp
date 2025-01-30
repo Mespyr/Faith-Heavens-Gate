@@ -7,8 +7,9 @@ Window::Window(std::ostream& log, const std::string& name, uint32_t width,
       WINDOW_HEIGHT(height),
       log(log),
       palette(palette) {
-    // dont blur the window texture
-    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, 0);
+	// TODO: if added to sdl3 in the future,
+	// find a function to set the whole renderer to
+	// SDL_SCALEMODE_NEAREST
     if (!create_window() || !create_renderer() || !create_game_texture() ||
         !create_scanline_texture()) {
         quit = true;
@@ -21,5 +22,5 @@ Window::Window(std::ostream& log, const std::string& name, uint32_t width,
 void Window::handle_events() {
     SDL_Event e;
     while (SDL_PollEvent(&e))
-        if (e.type == SDL_QUIT) quit = true;
+        if (e.type == SDL_EVENT_QUIT) quit = true;
 }

@@ -13,10 +13,10 @@ void log_sdl_error(std::ostream &log, const std::string &sdl_function) {
 }
 
 bool init_lib(std::ostream &log) {
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        log_error(log, "SDL_Init");
+    if (!SDL_Init(SDL_INIT_VIDEO)) {
+        log_sdl_error(log, "SDL_Init");
         return false;
     }
-    log << "SDL2 successfully initialized." << std::endl;
+    log << "SDL successfully initialized." << std::endl;
     return true;
 }

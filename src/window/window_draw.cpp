@@ -4,8 +4,8 @@ void Window::draw() {
     SDL_RenderClear(renderer.get());
     SDL_UpdateTexture(game_texture.get(), nullptr, PIXELS,
                       GAME_WIDTH * sizeof(uint32_t));
-    SDL_RenderCopy(renderer.get(), game_texture.get(), NULL, NULL);
-    SDL_RenderCopy(renderer.get(), scanline_texture.get(), NULL, NULL);
+    SDL_RenderTexture(renderer.get(), game_texture.get(), NULL, NULL);
+    SDL_RenderTexture(renderer.get(), scanline_texture.get(), NULL, NULL);
     SDL_RenderPresent(renderer.get());
 }
 

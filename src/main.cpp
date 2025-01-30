@@ -1,4 +1,4 @@
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 
 #include <cstdint>
 #include <iostream>
@@ -24,6 +24,9 @@ int32_t main() {
     const uint64_t ticks_per_15_fps = (1000 / 15);
     uint64_t       ticks_now, ticks_last_frame = SDL_GetTicks();
 
+	// position of cross
+	int32_t x_pos = 20, y_pos = 20;
+	
     do {
         window.handle_events();
         ticks_now = SDL_GetTicks();
@@ -32,31 +35,19 @@ int32_t main() {
         else {
             window.clear();
 
-            // a quick cross
+            // simple code to make a moving cross
             for (uint32_t x = 0; x < 30; x++) {
-                for (uint32_t b = 0; b < 8; b++) {
-                    window.set(x + 20, b + 20, Palette::ORANGE);
+                for (uint32_t y = 0; y < 8; y++) {
+                    window.set(x + x_pos, y + y_pos + 10, Palette::ORANGE);
                 }
             }
             for (uint32_t x = 0; x < 8; x++) {
-                for (uint32_t b = 0; b < 44; b++) {
-                    window.set(x + 31, b + 10, Palette::ORANGE);
+                for (uint32_t y = 0; y < 45; y++) {
+                    window.set(x + x_pos+11, y + y_pos, Palette::ORANGE);
                 }
             }
-
-            window.set(100, 99, Palette::HOT_PINK);
-            window.set(101, 99, Palette::HOT_PINK);
-            window.set(102, 99, Palette::HOT_PINK);
-            window.set(103, 99, Palette::HOT_PINK);
-            window.set(104, 99, Palette::HOT_PINK);
-            window.set(105, 99, Palette::HOT_PINK);
-
-            window.set(100, 100, Palette::HOT_PINK);
-            window.set(101, 100, Palette::HOT_PINK);
-            window.set(102, 100, Palette::HOT_PINK);
-            window.set(103, 100, Palette::HOT_PINK);
-            window.set(104, 100, Palette::HOT_PINK);
-            window.set(105, 100, Palette::HOT_PINK);
+			if (y_pos++ >= 135) y_pos = -45;
+			if (x_pos++ >= 240) x_pos = -30;
 
             window.draw();
             ticks_last_frame = ticks_now;
