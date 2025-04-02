@@ -13,7 +13,7 @@ HEADERS=$(foreach dir, $(SRC_DIRS), $(wildcard $(dir)/*.hpp))
 OBJ_DIR=obj
 OBJ_FILES=$(foreach dir, $(SRC_DIRS), \
   $(patsubst $(dir)/%.cpp, $(OBJ_DIR)/%.o, $(wildcard $(dir)/*.cpp)))
-BIN=FHG
+BIN=HeavensGate
 
 define compile_dir
 $(OBJ_DIR)/%.o: $(1)/%.cpp $(OBJ_DIR)
