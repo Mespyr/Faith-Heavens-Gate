@@ -7,16 +7,11 @@ Window::Window(std::ostream& log, const std::string& name, uint32_t width,
       WINDOW_HEIGHT(height),
       log(log),
       palette(palette) {
-	// TODO: if added to sdl3 in the future,
-	// find a function to set the whole renderer to
-	// SDL_SCALEMODE_NEAREST
     if (!create_window() || !create_renderer() || !create_game_texture() ||
         !create_scanline_texture()) {
         quit = true;
         return;
     }
-    // reset renderer target, now ready to draw frames
-    SDL_SetRenderTarget(renderer.get(), NULL);
 }
 
 void Window::handle_events() {

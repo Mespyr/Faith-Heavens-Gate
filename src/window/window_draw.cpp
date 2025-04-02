@@ -14,6 +14,6 @@ void Window::set(uint32_t x, uint32_t y, Palette::Color color) {
         PIXELS[(y * GAME_WIDTH) + x] = palette.get(color);
 }
 
-void Window::clear() {
-    std::memset(PIXELS, palette.get(Palette::BLACK), sizeof(PIXELS));
+void Window::clear(Palette::Color color) {
+    std::fill(PIXELS, PIXELS + (GAME_WIDTH * GAME_HEIGHT), palette.get(color));
 }

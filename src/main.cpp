@@ -8,6 +8,22 @@
 #include "util.hpp"
 #include "window/window.hpp"
 
+// clang-format off
+uint8_t cross[6 * 10] =
+	{
+		0, 0, 1, 1, 0, 0,
+		0, 0, 1, 1, 0, 0,
+		0, 0, 1, 1, 0, 0,
+		1, 1, 1, 1, 1, 1,
+		1, 1, 1, 1, 1, 1,
+		0, 0, 1, 1, 0, 0,
+		0, 0, 1, 1, 0, 0,
+		0, 0, 1, 1, 0, 0,
+		0, 0, 1, 1, 0, 0,
+		0, 0, 1, 1, 0, 0
+	};
+// clang-format on
+
 int32_t main() {
     std::ostream& log = std::cerr;
 
@@ -24,16 +40,14 @@ int32_t main() {
     const uint64_t ticks_per_15_fps = (1000 / 15);
     uint64_t       ticks_now, ticks_last_frame = SDL_GetTicks();
 
-	// position of cross
-	int32_t x_pos = 20, y_pos = 20;
-	
+    // position of cross
+    int32_t x_pos = 20, y_pos = 20;
+
     do {
         window.handle_events();
         ticks_now = SDL_GetTicks();
-        if ((ticks_now - ticks_last_frame) < ticks_per_15_fps)
-            SDL_Delay(1);
-        else {
-            window.clear();
+        if ((ticks_now - ticks_last_frame) >= ticks_per_15_fps) {
+            window.clear(Palette::BLACK);
 
             // simple code to make a moving cross
             for (uint32_t x = 0; x < 30; x++) {
@@ -43,11 +57,11 @@ int32_t main() {
             }
             for (uint32_t x = 0; x < 8; x++) {
                 for (uint32_t y = 0; y < 45; y++) {
-                    window.set(x + x_pos+11, y + y_pos, Palette::ORANGE);
+                    window.set(x + x_pos + 11, y + y_pos, Palette::ORANGE);
                 }
             }
-			if (y_pos++ >= 135) y_pos = -45;
-			if (x_pos++ >= 240) x_pos = -30;
+            if (y_pos++ >= 135) y_pos = -45;
+            if ((x_pos += 2) >= 240) x_pos = -30;
 
             window.draw();
             ticks_last_frame = ticks_now;

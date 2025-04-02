@@ -21,22 +21,22 @@ class Window {
     std::unique_ptr<SDL_Texture, SDL_Deleter> load_texture(
         const std::string& file_path);
 
-    void clear();
+    void clear(Palette::Color color);
     void draw();
     void handle_events();
     void set(uint32_t x, uint32_t y, Palette::Color color);
 
   private:
+    bool               quit = false;
     const std::string& name;
     const uint32_t     WINDOW_WIDTH, WINDOW_HEIGHT;
-    bool               quit = false;
     std::ostream&      log;
 
     // native game resolution
-    static const uint32_t GAME_WIDTH = 240, GAME_HEIGHT = 135;
+    static const uint32_t GAME_WIDTH = 320, GAME_HEIGHT = 180;
     int32_t               PIXELS[GAME_WIDTH * GAME_HEIGHT];
-    static const uint32_t SCANLINE_WIDTH = GAME_WIDTH * 2,
-                          SCANLINE_HEIGHT = GAME_HEIGHT * 2;
+    static const uint32_t SCANLINE_WIDTH = GAME_WIDTH,
+                          SCANLINE_HEIGHT = GAME_HEIGHT;
 
     std::unique_ptr<SDL_Window, SDL_Deleter>   window;
     std::unique_ptr<SDL_Renderer, SDL_Deleter> renderer;
